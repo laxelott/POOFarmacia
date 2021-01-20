@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package safo;
+package safo.salud;
 
 import java.sql.Time;
 
@@ -17,6 +17,15 @@ public class Consulta {
     private Time hora;
     private String padecimiento;
 
+    public Consulta(Medico medico, Paciente paciente, String padecimiento) {
+        this.medico = medico;
+        this.paciente = paciente;
+        this.padecimiento = padecimiento;
+        this.hora = new Time(System.currentTimeMillis());
+    }
+
+    
+    
     public Medico getMedico() {
         return medico;
     }

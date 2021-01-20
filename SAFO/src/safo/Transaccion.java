@@ -5,6 +5,10 @@
  */
 package safo;
 
+import safo.salud.Receta;
+import safo.caja.Descuento;
+import safo.caja.Producto;
+
 /**
  *
  * @author Laxelott

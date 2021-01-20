@@ -3,7 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package safo;
+package safo.salud;
+
+import safo.Cliente;
+import safo.ServicioEspecial;
+import safo.caja.Producto;
 
 /**
  *
@@ -16,9 +20,26 @@ public class Medico {
     private String cedula;
     private int consultorio;
 
+    public Receta recetar(Consulta consulta, Boolean saludable, Producto[] medicamentosRecetados) {
+        return new Receta(consulta, saludable, medicamentosRecetados);
+    }
+    
+    public Consulta realizarConsulta(Paciente paciente, String padecimiento) {
+        return new Consulta(this, paciente, padecimiento);
+    }
+
     public void realizarSerivicioEspecial(ServicioEspecial servicio, Paciente paciente) {
         System.out.println("Realizando" + servicio.getTipo()
                 + " a " + paciente.getNombre());
+    }
+
+    public Analisis expedirAnalisis(Cliente cliente, String analisis) {
+        return new Analisis(cliente, analisis);
+
+    }
+
+    public Tratamiento expedirTratamiento(Cliente cliente, String instrucciones) {
+        return new Tratamiento(cliente, this, instrucciones);
     }
 
     public int getId() {

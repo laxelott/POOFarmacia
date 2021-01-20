@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package safo;
+package safo.salud;
+
+import safo.Cliente;
 
 /**
  *
@@ -15,7 +17,7 @@ public class Paciente extends Cliente {
     private short estatura;
     private String[] alergias;
 
-    public Paciente(int id, String nombre, String RFC, String edad, short peso, short estatura, String[] alergias) {
+    public Paciente(int id, String nombre, String RFC, int edad, short peso, short estatura, String[] alergias) {
         super(id, nombre, RFC, edad);
         this.peso = peso;
         this.estatura = estatura;

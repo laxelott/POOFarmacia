@@ -5,6 +5,8 @@
  */
 package safo;
 
+import safo.caja.Mostrador;
+
 /**
  *
  * @author Laxelott
@@ -14,9 +16,9 @@ public class Cliente {
     private int id;
     private String nombre;
     private String RFC;
-    private String edad;
+    private int edad;
     
-    public Cliente(int id, String nombre, String RFC, String edad) {
+    public Cliente(int id, String nombre, String RFC, int edad) {
         this.id = id;
         this.nombre = nombre;
         this.RFC = RFC;
@@ -51,11 +53,11 @@ public class Cliente {
         this.RFC = RFC;
     }
 
-    public String getEdad() {
+    public int getEdad() {
         return edad;
     }
 
-    public void setEdad(String edad) {
+    public void setEdad(int edad) {
         this.edad = edad;
     }
     

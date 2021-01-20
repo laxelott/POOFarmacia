@@ -3,7 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package safo;
+package safo.caja;
+
+import safo.Cliente;
+import safo.salud.Receta;
+import safo.Transaccion;
 
 /**
  *
@@ -36,6 +40,10 @@ public class Caja implements Transaccion {
         this.compra(receta, producto, descuentoNulo);
     }
 
+    public Descuento generarDescuento(Cliente cliente, float descuento) {
+        return new Descuento(cliente, descuento, 0d);
+    }
+    
     public void surtir(Receta receta) {
         int limi = receta.getMedicamentosRecetados().length;
 

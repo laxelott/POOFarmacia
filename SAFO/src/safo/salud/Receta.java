@@ -3,7 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package safo;
+package safo.salud;
+
+import safo.Cliente;
+import safo.caja.Producto;
 
 /**
  *
