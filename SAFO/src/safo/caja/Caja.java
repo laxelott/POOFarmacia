@@ -19,7 +19,7 @@ public class Caja implements Transaccion {
     private double egresos;
     private double ingresos;
     private Empleado encargado;
-
+    
     @Override
     public void compra(Receta receta, Producto producto, Descuento descuento) {
         if (descuento.getCliente().getId() == receta.getConsulta().getPaciente().getId()) {

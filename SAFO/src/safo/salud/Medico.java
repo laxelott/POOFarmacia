@@ -6,7 +6,6 @@
 package safo.salud;
 
 import safo.Cliente;
-import safo.ServicioEspecial;
 import safo.caja.Producto;
 
 /**
@@ -20,10 +19,24 @@ public class Medico {
     private String cedula;
     private int consultorio;
 
+    /**
+     * Genera una receta de la consulta
+     * 
+     * @param consulta La consulta a la cual pertenece la receta
+     * @param saludable Si el paciente estuvo saludable o no
+     * @param medicamentosRecetados Lista de medicamentos recetados
+     * @return Receta firmada por el médico
+     */
     public Receta recetar(Consulta consulta, Boolean saludable, Producto[] medicamentosRecetados) {
         return new Receta(consulta, saludable, medicamentosRecetados);
     }
     
+    /**
+     * 
+     * @param paciente
+     * @param padecimiento
+     * @return 
+     */
     public Consulta realizarConsulta(Paciente paciente, String padecimiento) {
         return new Consulta(this, paciente, padecimiento);
     }
