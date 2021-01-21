@@ -3,19 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package safo;
+package safo.salud;
 
 /**
  *
  * @author Laxelott
  */
-public class SAFO {
+public class ServicioEspecial {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
+    private String tipo;
+
+    public String getTipo() {
+        return tipo;
     }
-    
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
 }
