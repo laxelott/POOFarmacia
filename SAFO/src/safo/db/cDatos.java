@@ -43,7 +43,7 @@ public class cDatos {
     public cDatos() {
         // Poner los datos apropiados
         this.usrBD = "root";
-        this.passBD = "";
+        this.passBD = "n0m3l0";
         this.urlBD = "jdbc:mysql://127.0.0.1:3306/safo?useUnicode=true&characterEncoding=utf-8";
 
         // com.mysql.jdbc.Driver

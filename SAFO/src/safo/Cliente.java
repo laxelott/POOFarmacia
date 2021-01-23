@@ -6,6 +6,8 @@
 package safo;
 
 import safo.caja.Mostrador;
+import safo.db.Conexion;
+import safo.db.exceptions.IdNotFoundException;
 
 /**
  *
@@ -15,13 +17,25 @@ public class Cliente {
 
     private int id;
     private String nombre;
-    private String RFC;
+    private String rfc;
     private int edad;
+
+    public Cliente() {
+    }
+        
+    public Cliente(int id) throws IdNotFoundException {
+        Cliente aux = Conexion.getDBCliente(id);
+        
+        this.id = aux.id;
+        this.nombre = aux.nombre;
+        this.rfc = aux.rfc;
+        this.edad = aux.edad;
+    }
     
     public Cliente(int id, String nombre, String RFC, int edad) {
         this.id = id;
         this.nombre = nombre;
-        this.RFC = RFC;
+        this.rfc = RFC;
         this.edad = edad;
     }
     
@@ -46,11 +60,11 @@ public class Cliente {
     }
 
     public String getRFC() {
-        return RFC;
+        return rfc;
     }
 
     public void setRFC(String RFC) {
-        this.RFC = RFC;
+        this.rfc = RFC;
     }
 
     public int getEdad() {

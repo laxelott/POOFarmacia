@@ -8,6 +8,8 @@ package safo.caja;
 import java.sql.Time;
 import java.util.HashMap;
 import javafx.util.Pair;
+import safo.db.Conexion;
+import safo.db.exceptions.IdNotFoundException;
 
 /**
  *
@@ -21,18 +23,22 @@ public class Inventario {
         0 -> Egreso
         1 -> Ingreso
      */
+    private int id;
     private Producto producto;
     private HashMap<Time, Pair<Integer, Integer>> operaciones;
     private int cantidadDeProducto;
 
-    public Inventario(Producto producto, int cantidadDeProductos) {
+    public Inventario(int id) throws IdNotFoundException {
+        Inventario aux = Conexion.getDBInventario(id);
+        this.id = aux.id;
+        this.producto = aux.producto;
+        this.cantidadDeProducto = aux.cantidadDeProducto;
+    }
+
+    public Inventario(int id, Producto producto, int cantidadDeProductos) {
+        this.id = id;
         this.producto = producto;
         this.cantidadDeProducto = cantidadDeProductos;
-
-        // TODO Obtener el registro de la BD
-        operaciones = new HashMap();
-
-        // Registrar en BD
     }
 
     public void modificarInventario(Empleado empleado, int cantidad) {
