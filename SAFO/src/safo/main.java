@@ -27,13 +27,20 @@ public class main {
         Scanner in = new Scanner(System.in);
         String input;
 
+        while (true) {
+            if (obtenerEmpleado()) {
+                break;
+            } else {
+                System.out.println("Intente de nuevo...");
+            }
+        }
+
         while (continuar) {
             System.out.println("-- FARMACIA --");
             System.out.println("Eliga una opción:");
             System.out.println("1.- Consultar paciente");
-            System.out.println("2.- Consultar empleado");
-            System.out.println("3.- Generar receta");
-            System.out.println("4.- Salir");
+            System.out.println("2.- Generar receta");
+            System.out.println("3.- Salir");
 
             input = in.nextLine();
 
@@ -42,28 +49,24 @@ public class main {
                     obtenerPaciente();
                     break;
                 case '2':
-                    obtenerEmpleado();
-                    break;
-                case '3':
                     generarReceta();
                     break;
-                case '4':
+                case '3':
                     continuar = false;
                     break;
                 default:
                     System.out.println("Opción inválida!");
+                    break;
             }
-
         }
-
-        generarReceta();
     }
 
-    private static void obtenerEmpleado() {
+    private static boolean obtenerEmpleado() {
         // Pide id del paciente, y te regresa sus datos
         Scanner in = new Scanner(System.in);
         String username, password;
         Empleado empleado;
+        boolean result = false;
 
         System.out.println("Inserte el nombre de usuario:");
         username = in.nextLine();
@@ -74,14 +77,16 @@ public class main {
         try {
             empleado = new Empleado(username, password.hashCode());
 
+            result = true;
             System.out.println("Credenciales correctas!");
             System.out.println("Nombre: " + empleado.getNombre());
 
         } catch (WrongCredentialsException ex) {
             System.out.println("Credenciales incorrectas!");
         }
-        
+
         System.out.println("");
+        return result;
     }
 
     private static void generarReceta() {
