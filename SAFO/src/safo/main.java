@@ -158,8 +158,6 @@ public class main {
             System.out.println("Estatura: " + paciente.getEstatura() + "cm");
             System.out.println("Alergias: ");
 
-            System.out.print("NINGUNA\r");
-
             limi = paciente.getAlergias().length;
             for (int i = 0; i < limi; i++) {
                 System.out.println("\t" + paciente.getAlergias()[i]);
