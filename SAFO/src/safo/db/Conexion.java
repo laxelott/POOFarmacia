@@ -10,6 +10,7 @@ import database.cDatos;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,8 +19,10 @@ import safo.caja.Empleado;
 import safo.caja.Inventario;
 import safo.caja.Producto;
 import safo.db.exceptions.WrongCredentialsException;
+import safo.salud.Consulta;
 import safo.salud.Medico;
 import safo.salud.Paciente;
+import safo.salud.Receta;
 
 /**
  *
@@ -27,6 +30,105 @@ import safo.salud.Paciente;
  */
 public class Conexion {
 
+    /* Inserciones */
+    public static int insertDBReceta(Receta receta) {
+        ResultSet res;
+        cDatos db = new cDatos();
+        int limi;
+        int id = -1;
+
+        try {
+            db.open();
+
+            // Insertar el registro de receta
+            db.setPreparedStatement("insert into recetas(saludable, id_consulta) values (?, ?)");
+            db.setPreparedVariables(new SimpleEntry[]{
+                new SimpleEntry("int", receta.getSaludable() ? 1 : 0),
+                new SimpleEntry("int", receta.getConsulta().getId())
+            });
+
+            db.runPreparedUpdate();
+
+            // Obtener la id de la receta que se acaba de recetar
+            db.setPreparedStatement("select id from recetas where id_consulta = ?");
+            db.setPreparedVariables(new SimpleEntry[]{
+                new SimpleEntry("int", receta.getConsulta().getId())
+            });
+
+            res = db.runPreparedQuery();
+
+            // Insertar cada medicamento recetado
+            if (res.next()) {
+                id = res.getInt("id");
+                limi = receta.getMedicamentosRecetados().length;
+                for (int i = 0; i < limi; ++i) {
+                    db.setPreparedStatement("insert into medicamentosRecetados(id_receta, nombre_medicamento) values (?, ?)");
+                    db.setPreparedVariables(new SimpleEntry[]{
+                        new SimpleEntry("int", id),
+                        new SimpleEntry("String", receta.getMedicamentosRecetados()[i])
+                    });
+
+                    db.runPreparedUpdate();
+                }
+            } else {
+                System.out.println("Algo muy malo pasó...");
+            }
+
+            db.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return id;
+    }
+
+    public static int insertDBConsulta(Consulta consulta) {
+        ResultSet res;
+        cDatos db = new cDatos();
+        int id = -1;
+
+        try {
+            db.open();
+
+            // Insertar el registro de consulta
+            db.setPreparedStatement("insert into recetas(id_medico, id_paciente, fecha_hora, padecimiento) values (?, ?, ?, ?)");
+            db.setPreparedVariables(new SimpleEntry[]{
+                new SimpleEntry("int", consulta.getMedico().getId()),
+                new SimpleEntry("int", consulta.getPaciente().getId()),
+                new SimpleEntry("date", consulta.getHora()),
+                new SimpleEntry("string", consulta.getPadecimiento())
+            });
+
+            db.runPreparedUpdate();
+
+            // Obtener la id de la consulta 
+            db.setPreparedStatement("select id from recetas where "
+                    + "id_medico = ? and "
+                    + "id_paciente = ? and"
+                    + "fecha_hora = ? and"
+                    + "padecimiento = ?");
+            db.setPreparedVariables(new SimpleEntry[]{
+                new SimpleEntry("int", consulta.getMedico().getId()),
+                new SimpleEntry("int", consulta.getPaciente().getId()),
+                new SimpleEntry("date", consulta.getHora()),
+                new SimpleEntry("string", consulta.getPadecimiento())
+            });
+
+            res = db.runPreparedQuery();
+
+            if (res.next()) {
+                id = res.getInt("id");
+            } else {
+                System.out.println("No se insertó la receta que se acaba de insertar?");
+            }
+
+            db.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return id;
+    }
+
+    /* Gets */
     public static Cliente getDBCliente(int id) throws IdNotFoundException {
         ResultSet res;
         Cliente cliente = new Cliente(-1, "inexistente", "no", 0);
@@ -36,8 +138,8 @@ public class Conexion {
             db.open();
 
             db.setPreparedStatement("select * from clientes where clientes.id = ?");
-            db.setPreparedVariables(new String[][]{
-                {"int", String.valueOf(id)}
+            db.setPreparedVariables(new SimpleEntry[]{
+                new SimpleEntry("int", id)
             });
 
             res = db.runPreparedQuery();
@@ -69,8 +171,8 @@ public class Conexion {
             db.open();
 
             db.setPreparedStatement("select * from medicos where medicos.id = ?");
-            db.setPreparedVariables(new String[][]{
-                {"int", String.valueOf(id)}
+            db.setPreparedVariables(new SimpleEntry[]{
+                new SimpleEntry("int", id)
             });
 
             res = db.runPreparedQuery();
@@ -98,8 +200,8 @@ public class Conexion {
 
             db.setPreparedStatement("SELECT * FROM pacientes_datos"
                     + "	WHERE id = ?;");
-            db.setPreparedVariables(new String[][]{
-                {"int", String.valueOf(id)}
+            db.setPreparedVariables(new SimpleEntry[]{
+                new SimpleEntry("int", id)
             });
 
             res = db.runPreparedQuery();
@@ -133,16 +235,16 @@ public class Conexion {
         try {
             db.open();
 
-            db.setPreparedStatement("SELECT * FROM alergias_paciente"
+            db.setPreparedStatement("SELECT * FROM alergias_pacientes"
                     + "	WHERE id = ?;");
-            db.setPreparedVariables(new String[][]{
-                {"int", String.valueOf(idPaciente)}
+            db.setPreparedVariables(new SimpleEntry[]{
+                new SimpleEntry("int", idPaciente)
             });
 
             res = db.runPreparedQuery();
 
             while (res.next()) {
-                alergias.add(res.getString("alergia"));
+                alergias.add(res.getString("nombre"));
             }
 
             db.close();
@@ -164,8 +266,8 @@ public class Conexion {
                     + "	INNER JOIN productos\n"
                     + "		ON inventario.id_producto = productos.id\n"
                     + "	WHERE productos.id = ?;");
-            db.setPreparedVariables(new String[][]{
-                {"int", String.valueOf(id)}
+            db.setPreparedVariables(new SimpleEntry[]{
+                new SimpleEntry("int", id)
             });
 
             res = db.runPreparedQuery();
@@ -201,9 +303,9 @@ public class Conexion {
             ResultSet res;
 
             db.setPreparedStatement("select * from empleados where empleados.username = ? and empleados.clave_acceso = ?");
-            db.setPreparedVariables(new String[][]{
-                {"String", username},
-                {"int", String.valueOf(password)}
+            db.setPreparedVariables(new SimpleEntry[]{
+                new SimpleEntry("String", username),
+                new SimpleEntry("int", password)
             });
 
             res = db.runPreparedQuery();

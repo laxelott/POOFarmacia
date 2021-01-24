@@ -11,6 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -128,20 +130,22 @@ public class cDatos {
         this.preparedReady = false;
     }
 
-    public void setPreparedVariables(String[][] variables) throws SQLException {
+    public void setPreparedVariables(SimpleEntry<String, Object>[] variables) throws SQLException {
         int n = variables.length;
-
+        
         for (int i = 0; i < n; ++i) {
-
-            switch (variables[i][0]) {
-                case "String":
-                    this.prepared.setString(i + 1, variables[i][1]);
+            switch (variables[i].getKey().toLowerCase()) {
+                case "string":
+                    this.prepared.setString(i + 1, (String) variables[i].getValue());
                     break;
                 case "int":
-                    this.prepared.setInt(i + 1, Integer.parseInt(variables[i][1]));
+                    this.prepared.setInt(i + 1, (Integer) variables[i].getValue());
                     break;
                 case "bytes":
-                    this.prepared.setBytes(i + 1, variables[i][1].getBytes());
+                    this.prepared.setBytes(i + 1, ((String) variables[i].getValue()).getBytes());
+                    break;
+                case "timestamp":
+                    this.prepared.setTimestamp(i + 1, ((Timestamp) variables[i].getValue()));
                     break;
             }
 
