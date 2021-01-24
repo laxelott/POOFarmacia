@@ -48,7 +48,7 @@ public class Medico {
      * @param medicamentosRecetados Lista de medicamentos recetados
      * @return Receta firmada por el médico
      */
-    public Receta recetar(Consulta consulta, Boolean saludable, Producto[] medicamentosRecetados) {
+    public Receta recetar(Consulta consulta, Boolean saludable, String[] medicamentosRecetados) {
         return new Receta(consulta, saludable, medicamentosRecetados);
     }
     

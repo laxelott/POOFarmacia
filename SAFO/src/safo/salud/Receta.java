@@ -5,8 +5,7 @@
  */
 package safo.salud;
 
-import safo.Cliente;
-import safo.caja.Producto;
+import safo.db.Conexion;
 
 /**
  *
@@ -14,29 +13,18 @@ import safo.caja.Producto;
  */
 public class Receta {
 
-    private Cliente cliente;
     private Consulta consulta;
     private Boolean saludable;
-    private Producto[] medicamentosRecetados;
+    private String[] medicamentosRecetados;
 
-    public Receta(Consulta consulta, Boolean saludable, Producto[] medicamentosRecetados) {
+    public Receta(Consulta consulta, Boolean saludable, String[] medicamentosRecetados) {
         this.consulta = consulta;
         this.saludable = saludable;
         this.medicamentosRecetados = medicamentosRecetados;
     }
 
-    public Receta(Cliente cliente, Boolean saludable, Producto[] medicamentosRecetados) {
-        this.cliente = cliente;
-        this.saludable = saludable;
-        this.medicamentosRecetados = medicamentosRecetados;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void registrar() {
+        Conexion.insertDBReceta(this);
     }
 
     public Consulta getConsulta() {
@@ -55,11 +43,11 @@ public class Receta {
         this.saludable = saludable;
     }
 
-    public Producto[] getMedicamentosRecetados() {
+    public String[] getMedicamentosRecetados() {
         return medicamentosRecetados;
     }
 
-    public void setMedicamentosRecetados(Producto[] medicamentosRecetados) {
+    public void setMedicamentosRecetados(String[] medicamentosRecetados) {
         this.medicamentosRecetados = medicamentosRecetados;
     }
 

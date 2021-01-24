@@ -43,14 +43,6 @@ public class Caja implements Transaccion {
     public Descuento generarDescuento(Cliente cliente, float descuento) {
         return new Descuento(cliente, descuento, 0d);
     }
-    
-    public void surtir(Receta receta) {
-        int limi = receta.getMedicamentosRecetados().length;
-
-        for (int i = 0; i < limi; ++i) {
-            compra(receta, receta.getMedicamentosRecetados()[i]);
-        }
-    }
 
     public void setEncargado(Empleado encargado) {
         this.encargado = encargado;

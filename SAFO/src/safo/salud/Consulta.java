@@ -6,25 +6,33 @@
 package safo.salud;
 
 import java.sql.Time;
+import java.sql.Timestamp;
 
 /**
  *
  * @author Laxelott
  */
 public class Consulta {
+    private int id;
     private Medico medico;
     private Paciente paciente;
-    private Time hora;
+    private Timestamp  hora;
     private String padecimiento;
 
     public Consulta(Medico medico, Paciente paciente, String padecimiento) {
         this.medico = medico;
         this.paciente = paciente;
         this.padecimiento = padecimiento;
-        this.hora = new Time(System.currentTimeMillis());
+        this.hora = new Timestamp(System.currentTimeMillis());
     }
 
-    
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     
     public Medico getMedico() {
         return medico;
@@ -42,11 +50,11 @@ public class Consulta {
         this.paciente = paciente;
     }
 
-    public Time getHora() {
+    public Timestamp getHora() {
         return hora;
     }
 
-    public void setHora(Time hora) {
+    public void setHora(Timestamp hora) {
         this.hora = hora;
     }
 
