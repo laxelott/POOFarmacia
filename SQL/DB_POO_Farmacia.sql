@@ -148,7 +148,7 @@ CREATE TABLE consultas (
 	 id INT PRIMARY KEY AUTO_INCREMENT,
     id_medico INT NOT NULL, /*medico que atiende la consulta*/ 
 	 id_paciente INT NOT NULL, /*Paciente al que se le hace la consulta*/
-    fecha_hora DATE NOT NULL, /*Fecha y hora de la consulta donde se realizo la consulta*/
+    fecha_hora DATETIME NOT NULL, /*Fecha y hora de la consulta donde se realizo la consulta*/
     padecimiento TEXT, /*Descripcion de la consulta*/
 
     FOREIGN KEY (id_paciente) REFERENCES pacientes(id),
@@ -167,12 +167,10 @@ CREATE TABLE expediente (
 
 CREATE TABLE recetas (
 	id INT PRIMARY KEY AUTO_INCREMENT,
-	id_paciente INT NOT NULL, /*Paciente al que se le hace la receta*/
-    consulta INT NOT NULL, /*Numero de la consulta donde se realizo la consulta*/
-    producto INT, /*Medicamento de la reseta*/
+   saludable INT DEFAULT 0,
+	id_consulta INT DEFAULT -1, /*Numero de la consulta donde se realizo la consulta*/
 
-    FOREIGN KEY (id_paciente) REFERENCES pacientes(id),
-    FOREIGN KEY (producto) REFERENCES productos(id) 
+    FOREIGN KEY (id_consulta) REFERENCES consultas(id)
 );
 
 CREATE TABLE mostrador (
@@ -181,3 +179,12 @@ CREATE TABLE mostrador (
     FOREIGN KEY (producto) REFERENCES productos(id)
 );
 
+CREATE TABLE medicamentosRecetados(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	nombre_medicamento TEXT NOT NULL,
+	id_receta INT NOT NULL,
+	FOREIGN KEY (id_receta) REFERENCES recetas(id)
+);
+
+
+	
