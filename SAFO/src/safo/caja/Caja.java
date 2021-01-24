@@ -23,7 +23,7 @@ public class Caja implements Transaccion {
     @Override
     public void compra(Receta receta, Producto producto, Descuento descuento) {
         if (descuento.getCliente().getId() == receta.getConsulta().getPaciente().getId()) {
-            System.out.println(encargado.getNombreEmpleado() + "Surtió "
+            System.out.println(encargado.getNombre() + "Surtió "
                     + producto.getNombre() + " a "
                     + receta.getConsulta().getPaciente().getNombre() + " por $"
                     + producto.getPrecio() * (1 - descuento.getDescuento()) + ", autorizado por "

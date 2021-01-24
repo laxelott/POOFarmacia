@@ -62,7 +62,7 @@ public class Conexion {
                 id = res.getInt("id");
                 limi = receta.getMedicamentosRecetados().length;
                 for (int i = 0; i < limi; ++i) {
-                    db.setPreparedStatement("insert into medicamentosRecetados(id_receta, nombre_medicamento) values (?, ?)");
+                    db.setPreparedStatement("insert into medicamentos_recetados(id_receta, nombre_medicamento) values (?, ?)");
                     db.setPreparedVariables(new SimpleEntry[]{
                         new SimpleEntry("int", id),
                         new SimpleEntry("String", receta.getMedicamentosRecetados()[i])
@@ -90,26 +90,26 @@ public class Conexion {
             db.open();
 
             // Insertar el registro de consulta
-            db.setPreparedStatement("insert into recetas(id_medico, id_paciente, fecha_hora, padecimiento) values (?, ?, ?, ?)");
+            db.setPreparedStatement("insert into consultas(id_medico, id_paciente, fecha_hora, padecimiento) values (?, ?, ?, ?)");
             db.setPreparedVariables(new SimpleEntry[]{
                 new SimpleEntry("int", consulta.getMedico().getId()),
                 new SimpleEntry("int", consulta.getPaciente().getId()),
-                new SimpleEntry("date", consulta.getHora()),
+                new SimpleEntry("timestamp", consulta.getHora()),
                 new SimpleEntry("string", consulta.getPadecimiento())
             });
 
             db.runPreparedUpdate();
 
             // Obtener la id de la consulta 
-            db.setPreparedStatement("select id from recetas where "
+            db.setPreparedStatement("select id from consultas where "
                     + "id_medico = ? and "
-                    + "id_paciente = ? and"
-                    + "fecha_hora = ? and"
+                    + "id_paciente = ? and "
+                    + "fecha_hora = ? and "
                     + "padecimiento = ?");
             db.setPreparedVariables(new SimpleEntry[]{
                 new SimpleEntry("int", consulta.getMedico().getId()),
                 new SimpleEntry("int", consulta.getPaciente().getId()),
-                new SimpleEntry("date", consulta.getHora()),
+                new SimpleEntry("timestamp", consulta.getHora()),
                 new SimpleEntry("string", consulta.getPadecimiento())
             });
 
@@ -262,6 +262,7 @@ public class Conexion {
         try {
             db.open();
 
+             // TODO crear view para esta consulta
             db.setPreparedStatement("SELECT inventario.id AS invID, inventario.cantidad, productos.id AS prodID, productos.nombre, productos.precio FROM inventario\n"
                     + "	INNER JOIN productos\n"
                     + "		ON inventario.id_producto = productos.id\n"

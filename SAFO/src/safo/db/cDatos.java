@@ -145,8 +145,10 @@ public class cDatos {
                     this.prepared.setBytes(i + 1, ((String) variables[i].getValue()).getBytes());
                     break;
                 case "timestamp":
-                    this.prepared.setTimestamp(i + 1, ((Timestamp) variables[i].getValue()));
+                    this.prepared.setTimestamp(i + 1, (Timestamp) variables[i].getValue());
                     break;
+                default:
+                    System.err.println("The parameter #" + (i+1) + " did not have a defined type!");
             }
 
         }

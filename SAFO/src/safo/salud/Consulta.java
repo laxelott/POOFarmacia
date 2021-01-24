@@ -5,8 +5,8 @@
  */
 package safo.salud;
 
-import java.sql.Time;
 import java.sql.Timestamp;
+import safo.db.Conexion;
 
 /**
  *
@@ -24,6 +24,7 @@ public class Consulta {
         this.paciente = paciente;
         this.padecimiento = padecimiento;
         this.hora = new Timestamp(System.currentTimeMillis());
+        this.id = Conexion.insertDBConsulta(this);
     }
 
     public int getId() {

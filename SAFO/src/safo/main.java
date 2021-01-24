@@ -9,8 +9,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import safo.caja.Empleado;
 import safo.db.exceptions.IdNotFoundException;
-import safo.salud.Consulta;
+import safo.db.exceptions.WrongCredentialsException;
 import safo.salud.Medico;
 import safo.salud.Paciente;
 import safo.salud.Receta;
@@ -22,13 +23,72 @@ import safo.salud.Receta;
 public class main {
 
     public static void main(String[] args) {
+        boolean continuar = true;
+        Scanner in = new Scanner(System.in);
+        String input;
+
+        while (continuar) {
+            System.out.println("-- FARMACIA --");
+            System.out.println("Eliga una opción:");
+            System.out.println("1.- Consultar paciente");
+            System.out.println("2.- Consultar empleado");
+            System.out.println("3.- Generar receta");
+            System.out.println("4.- Salir");
+
+            input = in.nextLine();
+
+            switch (input.charAt(0)) {
+                case '1':
+                    obtenerPaciente();
+                    break;
+                case '2':
+                    obtenerEmpleado();
+                    break;
+                case '3':
+                    generarReceta();
+                    break;
+                case '4':
+                    continuar = false;
+                    break;
+                default:
+                    System.out.println("Opción inválida!");
+            }
+
+        }
+
         generarReceta();
+    }
+
+    private static void obtenerEmpleado() {
+        // Pide id del paciente, y te regresa sus datos
+        Scanner in = new Scanner(System.in);
+        String username, password;
+        Empleado empleado;
+
+        System.out.println("Inserte el nombre de usuario:");
+        username = in.nextLine();
+
+        System.out.println("Inserte su contraseña:");
+        password = in.nextLine();
+
+        try {
+            empleado = new Empleado(username, password.hashCode());
+
+            System.out.println("Credenciales correctas!");
+            System.out.println("Nombre: " + empleado.getNombre());
+
+        } catch (WrongCredentialsException ex) {
+            System.out.println("Credenciales incorrectas!");
+        }
+        
+        System.out.println("");
     }
 
     private static void generarReceta() {
         try {
             // Pide id del paciente, y te regresa sus datos
             Scanner in = new Scanner(System.in);
+            Medico medico = new Medico(3);
             String padecimiento;
             boolean saludable;
             ArrayList<String> medicamentos = new ArrayList();
@@ -59,22 +119,21 @@ public class main {
             } while (continuar.charAt(0) != 'n');
 
             Receta receta = new Receta(
-                    new Consulta(
-                            new Medico(1),
-                            new Paciente(3),
-                            padecimiento
-                    ),
-                    false,
+                    medico.realizarConsulta(new Paciente(2), padecimiento),
+                    saludable,
                     medicamentos.toArray(new String[0])
             );
             receta.registrar();
-            
+
+            System.out.println("Receta registrada!");
+            System.out.println("");
+
         } catch (IdNotFoundException ex) {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private static void preguntarPaciente() {
+    private static void obtenerPaciente() {
         // Pide id del paciente, y te regresa sus datos
         Scanner in = new Scanner(System.in);
         int id;
@@ -94,10 +153,14 @@ public class main {
             System.out.println("Estatura: " + paciente.getEstatura() + "cm");
             System.out.println("Alergias: ");
 
+            System.out.print("NINGUNA\r");
+
             limi = paciente.getAlergias().length;
             for (int i = 0; i < limi; i++) {
                 System.out.println("\t" + paciente.getAlergias()[i]);
             }
+
+            System.out.println("");
 
         } catch (IdNotFoundException ex) {
             System.out.println(ex.getMessage());

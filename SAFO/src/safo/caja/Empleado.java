@@ -43,7 +43,7 @@ public class Empleado {
         this.turno = aux.turno;
     }
 
-    public String getNombreEmpleado() {
+    public String getNombre() {
         return nombreEmpleado;
     }
 

@@ -45,7 +45,7 @@ public class Inventario {
         cantidadDeProducto += cantidad;
         Pair<Integer, Integer> datos;
         
-        System.out.println(empleado.getNombreEmpleado() + " modificó el inventario de " + producto.getNombre());
+        System.out.println(empleado.getNombre() + " modificó el inventario de " + producto.getNombre());
 
         datos = new Pair(cantidad > 0 ? 1 : 0, cantidad);
         operaciones.put(new Time(System.currentTimeMillis()), datos);

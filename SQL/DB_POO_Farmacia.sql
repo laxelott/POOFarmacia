@@ -42,9 +42,9 @@ CREATE TABLE pacientes (
 
 CREATE TABLE pacientes_alergias (
 	id INT auto_increment PRIMARY KEY,
-    id_cliente INT NOT NULL,
+    id_paciente INT NOT NULL,
     id_alergia INT NOT NULL,
-	FOREIGN KEY (id_cliente) REFERENCES clientes(id),
+	FOREIGN KEY (id_paciente) REFERENCES clientes(id),
     FOREIGN KEY (id_alergia) REFERENCES alergias(id) 
 );
 
@@ -179,12 +179,39 @@ CREATE TABLE mostrador (
     FOREIGN KEY (producto) REFERENCES productos(id)
 );
 
-CREATE TABLE medicamentosRecetados(
+CREATE TABLE medicamentos_recetados(
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	nombre_medicamento TEXT NOT NULL,
 	id_receta INT NOT NULL,
 	FOREIGN KEY (id_receta) REFERENCES recetas(id)
 );
 
+CREATE VIEW pacientes_datos AS
+SELECT clientes.id, nombre, rfc, edad, peso, estatura FROM clientes
+	INNER JOIN pacientes
+		ON clientes.id = pacientes.id;
+		
+CREATE VIEW alergias_pacientes AS
+SELECT pacientes.id, alergias.nombre FROM alergias
+	INNER JOIN pacientes_alergias
+		ON alergias.id = pacientes_alergias.id_alergia
+	INNER JOIN pacientes
+		ON pacientes_alergias.id_paciente = pacientes.id;
 
-	
+CREATE VIEW consultas_medicamentos AS 
+SELECT
+		consultas.id AS 'id_consulta', medicos.id AS 'id_medico', pacientes_datos.id AS 'id_paciente'
+		medicamentos_recetados.nombre_medicamento,
+		consultas.fecha_hora, consultas.padecimiento,
+		recetas.saludable, 
+		medicos.nombre AS 'nombre_medico',
+		pacientes_datos.nombre AS 'nombre_paciente', pacientes_datos.rfc, pacientes_datos.edad, pacientes_datos.peso, pacientes_datos.estatura
+	FROM medicamentos_recetados
+	LEFT JOIN recetas
+		ON medicamentos_recetados.id_receta = recetas.id
+	INNER JOIN consultas
+		ON recetas.id_consulta = consultas.id
+	INNER JOIN medicos
+		ON consultas.id_medico = medicos.id
+	INNER JOIN pacientes_datos
+		ON consultas.id_paciente = pacientes_datos.id 
