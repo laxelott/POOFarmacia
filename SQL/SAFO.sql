@@ -374,9 +374,9 @@ CREATE TABLE IF NOT EXISTS `consultas` (
   KEY `id_medico` (`id_medico`),
   CONSTRAINT `consultas_ibfk_1` FOREIGN KEY (`id_paciente`) REFERENCES `pacientes` (`id`),
   CONSTRAINT `consultas_ibfk_2` FOREIGN KEY (`id_medico`) REFERENCES `medicos` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=latin1;
 
--- Dumping data for table safo.consultas: ~102 rows (approximately)
+-- Dumping data for table safo.consultas: ~103 rows (approximately)
 /*!40000 ALTER TABLE `consultas` DISABLE KEYS */;
 INSERT INTO `consultas` (`id`, `id_medico`, `id_paciente`, `fecha_hora`, `padecimiento`) VALUES
 	(1, 2, 21, '2003-12-20 00:00:00', 'risus. In mi pede, nonummy ut, molestie in, tempus eu, ligula.'),
@@ -480,7 +480,8 @@ INSERT INTO `consultas` (`id`, `id_medico`, `id_paciente`, `fecha_hora`, `padeci
 	(99, 5, 18, '0000-00-00 00:00:00', 'nisi magna sed dui. Fusce aliquam, enim'),
 	(100, 7, 40, '0000-00-00 00:00:00', 'Cras eu tellus eu augue porttitor interdum. Sed auctor odio a'),
 	(101, 3, 2, '2021-01-24 20:02:55', 'Tiene lombrices :('),
-	(102, 3, 2, '2021-01-24 20:06:03', 'kolakola ');
+	(102, 3, 2, '2021-01-24 20:06:03', 'kolakola '),
+	(103, 3, 2, '2021-01-25 01:13:29', 'no funciona');
 /*!40000 ALTER TABLE `consultas` ENABLE KEYS */;
 
 -- Dumping structure for view safo.consultas_medicamentos
@@ -613,7 +614,7 @@ CREATE TABLE IF NOT EXISTS `empleados` (
 -- Dumping data for table safo.empleados: ~10 rows (approximately)
 /*!40000 ALTER TABLE `empleados` DISABLE KEYS */;
 INSERT INTO `empleados` (`id`, `nombre`, `username`, `clave_acceso`) VALUES
-	(1, 'Victor el Chupaletas', 'vicnow', -1039902179),
+	(1, 'Saul de la O Torres', 'profesorpoo', 1537277),
 	(2, 'Isaac el ...', 'lorena herrera', 2072983801),
 	(3, 'Wallace', 'Nullam lobortis', 0),
 	(4, 'Kamal', 'enim.', 0),
@@ -920,15 +921,16 @@ CREATE TABLE IF NOT EXISTS `medicamentos_recetados` (
   PRIMARY KEY (`id`),
   KEY `id_receta` (`id_receta`),
   CONSTRAINT `medicamentos_recetados_ibfk_1` FOREIGN KEY (`id_receta`) REFERENCES `recetas` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
--- Dumping data for table safo.medicamentos_recetados: ~4 rows (approximately)
+-- Dumping data for table safo.medicamentos_recetados: ~5 rows (approximately)
 /*!40000 ALTER TABLE `medicamentos_recetados` DISABLE KEYS */;
 INSERT INTO `medicamentos_recetados` (`id`, `nombre_medicamento`, `id_receta`) VALUES
 	(1, 'paracetamol', 1),
 	(2, 'te de limoncito', 1),
 	(3, 'tempra de uva', 1),
-	(4, 'Una peda ', 2);
+	(4, 'Una peda ', 2),
+	(5, 'reparaciones patito', 3);
 /*!40000 ALTER TABLE `medicamentos_recetados` ENABLE KEYS */;
 
 -- Dumping structure for table safo.medicos
@@ -1261,13 +1263,14 @@ CREATE TABLE IF NOT EXISTS `recetas` (
   PRIMARY KEY (`id`),
   KEY `id_consulta` (`id_consulta`),
   CONSTRAINT `recetas_ibfk_1` FOREIGN KEY (`id_consulta`) REFERENCES `consultas` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
--- Dumping data for table safo.recetas: ~2 rows (approximately)
+-- Dumping data for table safo.recetas: ~3 rows (approximately)
 /*!40000 ALTER TABLE `recetas` DISABLE KEYS */;
 INSERT INTO `recetas` (`id`, `saludable`, `id_consulta`) VALUES
 	(1, 0, 101),
-	(2, 1, 102);
+	(2, 1, 102),
+	(3, 0, 103);
 /*!40000 ALTER TABLE `recetas` ENABLE KEYS */;
 
 -- Dumping structure for table safo.resultados_lab
