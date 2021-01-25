@@ -23,8 +23,6 @@ import safo.salud.Receta;
  */
 public class main {
     public static void main(String[] args) {
-        
-        System.out.println("1321".hashCode());
         boolean continuar = true;
         Scanner in = new Scanner(System.in);
         String input;
