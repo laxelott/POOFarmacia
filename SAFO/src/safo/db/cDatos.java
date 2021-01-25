@@ -15,9 +15,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 /**
  *
@@ -27,19 +29,16 @@ public class cDatos {
 
     private boolean SQLite;
     private boolean preparedReady;
-    private String usrBD;
-    private String passBD;
-    private String urlBD;
     private String driverClassName;
     private String SQLiteDbPath;
+    private String connArgs;
     private Connection conn = null;
     private Statement estancia;
     private PreparedStatement prepared;
+    DBConnectionData connData;
 
-    public cDatos(String usuarioBD, String passwordBD, String url, String driverClassName, boolean SQLite, String SQLiteDbPath) {
-        this.usrBD = usuarioBD;
-        this.passBD = passwordBD;
-        this.urlBD = url;
+    public cDatos(DBConnectionData connData, String driverClassName, boolean SQLite, String SQLiteDbPath) {
+        this.connData = connData;
         this.driverClassName = driverClassName;
         this.SQLite = SQLite;
         this.SQLiteDbPath = SQLiteDbPath;
@@ -47,15 +46,11 @@ public class cDatos {
 
     public cDatos() {
         try {
-            // Poner los datos apropiados
-            Scanner reader = new Scanner(new File("credenciales.txt"));
-            this.usrBD = reader.nextLine();
-            this.passBD = reader.nextLine();
-            reader.close();
-            
-            
-            
-            this.urlBD = "jdbc:mysql://127.0.0.1:3306/safo?useUnicode=true&characterEncoding=utf-8";
+            // Obtener datos de conexion externas
+            this.connData = (DBConnectionData) JAXBContext.newInstance(DBConnectionData.class).createUnmarshaller().unmarshal(
+                    new File("credenciales.xml")
+            );
+            this.connArgs = "useUnicode=true&characterEncoding=utf-8";
 
             // com.mysql.jdbc.Driver
             // org.sqlite.JDBC
@@ -63,22 +58,14 @@ public class cDatos {
             this.SQLite = false;
             this.preparedReady = false;
             this.SQLiteDbPath = "E:\\Escuela\\Programación\\Lib\\DB\\SmaF.db";
-        } catch (FileNotFoundException ex) {
+        } catch (JAXBException ex) {
             Logger.getLogger(cDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     //metodos para establecer los valores de conexion a la BD
-    public void setUsuarioBD(String usuario) throws SQLException {
-        this.usrBD = usuario;
-    }
-
-    public void setPassBD(String pass) {
-        this.passBD = pass;
-    }
-
-    public void setUrlBD(String url) {
-        this.urlBD = url;
+    public void setConnData(DBConnectionData connData) {
+        this.connData = connData;
     }
 
     public void setConn(Connection conn) {
@@ -113,7 +100,11 @@ public class cDatos {
             if (this.SQLite) {
                 this.conn = DriverManager.getConnection("jdbc:sqlite:" + this.SQLiteDbPath + "?useUnicode=true&characterEncoding=utf-8");
             } else {
-                this.conn = DriverManager.getConnection(urlBD, usrBD, passBD);
+                this.conn = DriverManager.getConnection(
+                        "jdbc:mysql://" + connData.getHost() + ":" + connData.getPort() + "/" + connData.getDbName() + "?" + this.connArgs,
+                        connData.getUser(),
+                        connData.getPassword()
+                );
             }
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException err) {
             Logger.getLogger(cDatos.class.getName()).log(Level.SEVERE, null, err);

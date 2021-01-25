@@ -5,10 +5,12 @@
  */
 package safo;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.JAXBException;
 import safo.caja.Empleado;
 import safo.db.exceptions.IdNotFoundException;
 import safo.db.exceptions.WrongCredentialsException;
@@ -22,11 +24,11 @@ import safo.salud.Receta;
  */
 public class main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JAXBException, FileNotFoundException {
         boolean continuar = true;
         Scanner in = new Scanner(System.in);
         String input;
-        
+
         while (true) {
             if (obtenerEmpleado()) {
                 break;
@@ -43,6 +45,10 @@ public class main {
             System.out.println("3.- Salir");
 
             input = in.nextLine();
+
+            if (input.length() == 0) {
+                input = " ";
+            }
 
             switch (input.charAt(0)) {
                 case '1':
