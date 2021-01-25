@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<dbConnectionData>
-    <dbName>safo</dbName>
-    <host>127.0.0.1</host>
-    <port>3306</port>
-    <user>root</user>
-    <password>n0m3l0</password>
-</dbConnectionData>

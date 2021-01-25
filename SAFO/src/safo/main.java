@@ -6,12 +6,14 @@
 package safo;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
 import safo.caja.Empleado;
+import safo.db.cDatos;
 import safo.db.exceptions.IdNotFoundException;
 import safo.db.exceptions.WrongCredentialsException;
 import safo.salud.Medico;
@@ -24,10 +26,30 @@ import safo.salud.Receta;
  */
 public class main {
 
-    public static void main(String[] args) throws JAXBException, FileNotFoundException {
+    public static void main(String[] args) throws JAXBException, FileNotFoundException, IOException {
         boolean continuar = true;
         Scanner in = new Scanner(System.in);
         String input;
+
+/*        
+        try (OutputStream output = new FileOutputStream("safo.config")) {
+
+            Properties prop = new Properties();
+
+            // set the properties value
+            prop.setProperty("db.url", "127.0.0.1");
+            prop.setProperty("db.port", "3306");
+            prop.setProperty("db.name", "safo");
+            prop.setProperty("db.user", "root");
+            prop.setProperty("db.password", "n0m3l0");
+
+            // save properties to project root folder
+            prop.store(output, null);
+
+        } catch (IOException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+  */      
 
         while (true) {
             if (obtenerEmpleado()) {

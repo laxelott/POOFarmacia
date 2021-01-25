@@ -5,7 +5,9 @@
  */
 package safo.db;
 
-import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,10 +16,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 
 /**
  *
@@ -43,22 +44,29 @@ public class cDatos {
     }
 
     public cDatos() {
-        try {
-            // Obtener datos de conexion externas
-            this.connData = (DBConnectionData) JAXBContext.newInstance(DBConnectionData.class).createUnmarshaller().unmarshal(
-                    new File("credenciales.xml")
-            );
-            this.connArgs = "useUnicode=true&characterEncoding=utf-8";
+        try (InputStream input = new FileInputStream("safo.config")) {
+            Properties prop = new Properties();
+            this.connData = new DBConnectionData();
 
-            // com.mysql.jdbc.Driver
-            // org.sqlite.JDBC
-            this.driverClassName = "com.mysql.jdbc.Driver";
-            this.SQLite = false;
-            this.preparedReady = false;
-            this.SQLiteDbPath = "E:\\Escuela\\Programación\\Lib\\DB\\SmaF.db";
-        } catch (JAXBException ex) {
+            prop.load(input);
+
+            this.connData.setHost(prop.getProperty("db.url"));
+            this.connData.setUser(prop.getProperty("db.user"));
+            this.connData.setPort(Integer.parseInt(prop.getProperty("db.port")));
+            this.connData.setPassword(prop.getProperty("db.password"));
+            this.connData.setDbName(prop.getProperty("db.name"));
+            this.connData.setConnArgs("useUnicode=true&characterEncoding=utf-8");
+
+        } catch (IOException ex) {
             Logger.getLogger(cDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        // com.mysql.jdbc.Driver
+        // org.sqlite.JDBC
+        this.driverClassName = "com.mysql.jdbc.Driver";
+        this.SQLite = false;
+        this.preparedReady = false;
+        this.SQLiteDbPath = "E:\\Escuela\\Programación\\Lib\\DB\\SmaF.db";
     }
 
     //metodos para establecer los valores de conexion a la BD
@@ -99,7 +107,7 @@ public class cDatos {
                 this.conn = DriverManager.getConnection("jdbc:sqlite:" + this.SQLiteDbPath + "?useUnicode=true&characterEncoding=utf-8");
             } else {
                 this.conn = DriverManager.getConnection(
-                        "jdbc:mysql://" + connData.getHost() + ":" + connData.getPort() + "/" + connData.getDbName() + "?" + this.connArgs,
+                        connData.getUrl(),
                         connData.getUser(),
                         connData.getPassword()
                 );

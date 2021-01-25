@@ -5,23 +5,38 @@
  */
 package safo.db;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 /**
  *
  * @author Laxelott
  */
-@XmlRootElement
-public class DBConnectionData {
+public class DBConnectionData implements Serializable {
 
     private int port;
     private String host;
     private String user;
     private String password;
     private String dbName;
+    private String connArgs;
 
-    @XmlElement
+    @Override
+    public String toString() {
+        return "jdbc:mysql://" + this.host + ":" + this.port + "/" + this.dbName + "?" + this.connArgs;
+    }
+
+    public String getUrl() {
+        return this.toString();
+    }
+    
+    public String getConnArgs() {
+        return connArgs;
+    }
+
+    public void setConnArgs(String connArgs) {
+        this.connArgs = connArgs;
+    }
+
     public int getPort() {
         return port;
     }
@@ -30,7 +45,6 @@ public class DBConnectionData {
         this.port = port;
     }
 
-    @XmlElement
     public String getHost() {
         return host;
     }
@@ -39,7 +53,6 @@ public class DBConnectionData {
         this.host = host;
     }
 
-    @XmlElement
     public String getUser() {
         return user;
     }
@@ -48,7 +61,6 @@ public class DBConnectionData {
         this.user = user;
     }
 
-    @XmlElement
     public String getPassword() {
         return password;
     }
@@ -57,7 +69,6 @@ public class DBConnectionData {
         this.password = password;
     }
 
-    @XmlElement
     public String getDbName() {
         return dbName;
     }
