@@ -26,7 +26,7 @@ public class main {
         boolean continuar = true;
         Scanner in = new Scanner(System.in);
         String input;
-
+        
         while (true) {
             if (obtenerEmpleado()) {
                 break;
