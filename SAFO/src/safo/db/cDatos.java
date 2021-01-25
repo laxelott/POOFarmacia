@@ -61,9 +61,9 @@ public class cDatos {
             Logger.getLogger(cDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        // com.mysql.jdbc.Driver
+        // com.mysql.cj.jdbc.Driver
         // org.sqlite.JDBC
-        this.driverClassName = "com.mysql.jdbc.Driver";
+        this.driverClassName = "com.mysql.cj.jdbc.Driver";
         this.SQLite = false;
         this.preparedReady = false;
         this.SQLiteDbPath = "E:\\Escuela\\Programación\\Lib\\DB\\SmaF.db";
@@ -112,8 +112,8 @@ public class cDatos {
                         connData.getPassword()
                 );
             }
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException err) {
-            Logger.getLogger(cDatos.class.getName()).log(Level.SEVERE, null, err);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(cDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

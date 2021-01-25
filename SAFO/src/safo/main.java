@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.bind.JAXBException;
 import safo.caja.Empleado;
-import safo.db.cDatos;
 import safo.db.exceptions.IdNotFoundException;
 import safo.db.exceptions.WrongCredentialsException;
 import safo.salud.Medico;
@@ -26,7 +24,7 @@ import safo.salud.Receta;
  */
 public class main {
 
-    public static void main(String[] args) throws JAXBException, FileNotFoundException, IOException {
+    public static void main(String[] args) throws FileNotFoundException, IOException {
         boolean continuar = true;
         Scanner in = new Scanner(System.in);
         String input;
@@ -50,6 +48,8 @@ public class main {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
         }
   */      
+
+    generarReceta();
 
         while (true) {
             if (obtenerEmpleado()) {

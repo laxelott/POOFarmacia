@@ -24,6 +24,8 @@ public class Consulta {
         this.paciente = paciente;
         this.padecimiento = padecimiento;
         this.hora = new Timestamp(System.currentTimeMillis());
+        
+        System.out.println(padecimiento);
         this.id = Conexion.insertDBConsulta(this);
     }
 

@@ -89,22 +89,7 @@ public class Conexion {
             db.open();
 
             // Insertar el registro de consulta
-            db.setPreparedStatement("insert into consultas(id_medico, id_paciente, fecha_hora, padecimiento) values (?, ?, ?, ?)");
-            db.setPreparedVariables(new SimpleEntry[]{
-                new SimpleEntry("int", consulta.getMedico().getId()),
-                new SimpleEntry("int", consulta.getPaciente().getId()),
-                new SimpleEntry("timestamp", consulta.getHora()),
-                new SimpleEntry("string", consulta.getPadecimiento())
-            });
-
-            db.runPreparedUpdate();
-
-            // Obtener la id de la consulta 
-            db.setPreparedStatement("select id from consultas where "
-                    + "id_medico = ? and "
-                    + "id_paciente = ? and "
-                    + "fecha_hora = ? and "
-                    + "padecimiento = ?");
+            db.setPreparedStatement("call p_insertar_consulta(?, ?, ?, ?)");
             db.setPreparedVariables(new SimpleEntry[]{
                 new SimpleEntry("int", consulta.getMedico().getId()),
                 new SimpleEntry("int", consulta.getPaciente().getId()),
@@ -117,7 +102,7 @@ public class Conexion {
             if (res.next()) {
                 id = res.getInt("id");
             } else {
-                System.out.println("No se insertó la receta que se acaba de insertar?");
+                System.err.println("Hubo un error en la base de datos!");
             }
 
             db.close();
