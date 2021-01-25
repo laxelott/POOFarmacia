@@ -5,6 +5,8 @@
  */
 package safo.db;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,12 +15,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  *
- * @author Ger
+ * @author laxelott
  */
 public class cDatos {
 
@@ -43,17 +46,26 @@ public class cDatos {
     }
 
     public cDatos() {
-        // Poner los datos apropiados
-        this.usrBD = "victorh3_root";
-        this.passBD = "n0m3l0";
-        this.urlBD = "jdbc:mysql://162.241.2.107/victorh3_safo?useUnicode=true&characterEncoding=utf-8";
+        try {
+            // Poner los datos apropiados
+            Scanner reader = new Scanner(new File("credenciales.txt"));
+            this.usrBD = reader.nextLine();
+            this.passBD = reader.nextLine();
+            reader.close();
+            
+            
+            
+            this.urlBD = "jdbc:mysql://127.0.0.1:3306/safo?useUnicode=true&characterEncoding=utf-8";
 
-        // com.mysql.jdbc.Driver
-        // org.sqlite.JDBC
-        this.driverClassName = "com.mysql.jdbc.Driver";
-        this.SQLite = false;
-        this.preparedReady = false;
-        this.SQLiteDbPath = "E:\\Escuela\\Programación\\Lib\\DB\\SmaF.db";
+            // com.mysql.jdbc.Driver
+            // org.sqlite.JDBC
+            this.driverClassName = "com.mysql.jdbc.Driver";
+            this.SQLite = false;
+            this.preparedReady = false;
+            this.SQLiteDbPath = "E:\\Escuela\\Programación\\Lib\\DB\\SmaF.db";
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(cDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     //metodos para establecer los valores de conexion a la BD
@@ -132,7 +144,7 @@ public class cDatos {
 
     public void setPreparedVariables(SimpleEntry<String, Object>[] variables) throws SQLException {
         int n = variables.length;
-        
+
         for (int i = 0; i < n; ++i) {
             switch (variables[i].getKey().toLowerCase()) {
                 case "string":
@@ -148,7 +160,7 @@ public class cDatos {
                     this.prepared.setTimestamp(i + 1, (Timestamp) variables[i].getValue());
                     break;
                 default:
-                    System.err.println("The parameter #" + (i+1) + " did not have a defined type!");
+                    System.err.println("The parameter #" + (i + 1) + " did not have a defined type!");
             }
 
         }

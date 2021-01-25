@@ -26,7 +26,9 @@ public class main {
         boolean continuar = true;
         Scanner in = new Scanner(System.in);
         String input;
-
+        
+        System.out.println("2021".hashCode());
+        
         while (true) {
             if (obtenerEmpleado()) {
                 break;
