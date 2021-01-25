@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package database;
+package safo.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -44,9 +44,9 @@ public class cDatos {
 
     public cDatos() {
         // Poner los datos apropiados
-        this.usrBD = "root";
+        this.usrBD = "victorh3_root";
         this.passBD = "n0m3l0";
-        this.urlBD = "jdbc:mysql://127.0.0.1:3306/safo?useUnicode=true&characterEncoding=utf-8";
+        this.urlBD = "jdbc:mysql://162.241.2.107/victorh3_safo?useUnicode=true&characterEncoding=utf-8";
 
         // com.mysql.jdbc.Driver
         // org.sqlite.JDBC

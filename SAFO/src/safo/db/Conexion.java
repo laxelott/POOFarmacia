@@ -6,7 +6,7 @@
 package safo.db;
 
 import safo.db.exceptions.IdNotFoundException;
-import database.cDatos;
+import safo.db.cDatos;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
