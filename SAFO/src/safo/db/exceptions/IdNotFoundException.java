@@ -6,6 +6,7 @@
 package safo.db.exceptions;
 
 /**
+ * Si la id buscada no se encontró
  *
  * @author Laxelott
  */

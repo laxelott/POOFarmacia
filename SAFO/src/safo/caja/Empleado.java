@@ -30,10 +30,24 @@ public class Empleado {
         this.turno = turno;
     }
 
+    /**
+     * Constructor que automáticamente intenta iniciar sesión
+     *
+     * @param username Nombre de usuario
+     * @param claveAcceso HashCode de la contraseña
+     * @throws WrongCredentialsException Si las credenciales son inválidas
+     */
     public Empleado(String username, int claveAcceso) throws WrongCredentialsException {
         login(username, claveAcceso);
     }
 
+    /**
+     * Intenta iniciar sesión como empleado con las iniciales provistas
+     *
+     * @param username Nombre de usuario
+     * @param claveAcceso HashCode de la contraseña
+     * @throws WrongCredentialsException Si las credenciales son inválidas
+     */
     public void login(String username, int claveAcceso) throws WrongCredentialsException {
         Empleado aux = Conexion.getDBEmpleado(username, claveAcceso);
 

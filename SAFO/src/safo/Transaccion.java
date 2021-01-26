@@ -14,8 +14,9 @@ import safo.caja.Producto;
  * @author Laxelott
  */
 public interface Transaccion {
-    
+
     public void compra(Receta receta, Producto producto, Descuento descuento);
+
     public void compra(Receta receta, Producto producto);
-    
+
 }

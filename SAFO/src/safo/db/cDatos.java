@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Clase auxiliar para conectarse e interactuar con la base de datos
  *
  * @author laxelott
  */
@@ -43,6 +44,9 @@ public class cDatos {
         this.SQLiteDbPath = SQLiteDbPath;
     }
 
+    /**
+     * Lee la configuración del archivo 'safo.config'
+     */
     public cDatos() {
         try (InputStream input = new FileInputStream("safo.config")) {
             Properties prop = new Properties();
@@ -100,6 +104,11 @@ public class cDatos {
     }
 
     //Conexion a la BD
+    /**
+     * Abre la conexión a la Base de Datos
+     *
+     * @throws SQLException Si ocurrió algún error al abrir la Base de Datos
+     */
     public void open() throws SQLException {
         try {
             Class.forName(this.driverClassName).newInstance();
@@ -118,27 +127,61 @@ public class cDatos {
     }
 
     //Cerrar la conexion de BD
+    /**
+     * Cierra la conexión a la Base de Datos
+     *
+     * @throws SQLException Si ocurrió algún error al cerrar la Base de Datos
+     */
     public void close() throws SQLException {
         this.conn.close();
     }
 
     //Metodos para ejecutar sentencias SQL
+    /**
+     * Realizar una consulta a la Base de Datos
+     *
+     * @param consulta Consulta a realizar
+     * @return Conjunto de los resultados de la consulta
+     * @throws SQLException Si ocurrió algún error al consultar la Base de Datos
+     */
     public ResultSet query(String consulta) throws SQLException {
         this.estancia = (Statement) conn.createStatement();
         return this.estancia.executeQuery(consulta);
     }
 
+    /**
+     * Realizar una actualización a la Base de Datos (Sin datos de regreso)
+     *
+     * @param actualiza Actualización a realizar
+     * @throws SQLException Si ocurrió algún error al actualizar la Base de
+     * Datos
+     */
     public void update(String actualiza) throws SQLException {
         this.estancia = (Statement) conn.createStatement();
         estancia.executeUpdate(actualiza);
     }
 
     // Prepared Statements
+    /**
+     * Establece el Prepared Statement que se realizará a la Base de Datos
+     *
+     * @param statement El comando a realizar
+     * @throws SQLException Si ocurrió algún error al establecer el comando
+     */
     public void setPreparedStatement(String statement) throws SQLException {
         this.prepared = this.conn.prepareStatement(statement);
         this.preparedReady = false;
     }
 
+    /**
+     * Establece las variables a usar en el Prepared Statement
+     *
+     * @param variables Un arreglo de simple entry, el primer elemento tiene que
+     * ser uno de los siguientes (sin importar mayúsculas o minúsculas): -
+     * string: Para insertar un String - int: Para insertar un numero - bytes:
+     * Para insertar un blob - timestamp: Para insertar un datetime
+     * @throws SQLException Si ocurrió algún error al establecer las variables
+     */
     public void setPreparedVariables(SimpleEntry<String, Object>[] variables) throws SQLException {
         int n = variables.length;
 
@@ -165,16 +208,32 @@ public class cDatos {
         this.preparedReady = true;
     }
 
+    /**
+     * Realizar una consulta a la Base de Datos mediante el Prepared Statement
+     *
+     * @return Conjunto de los resultados de la consulta
+     * @throws SQLException Si ocurrió algún error al consultar la Base de Datos
+     */
     public ResultSet runPreparedQuery() throws SQLException {
         checkPreparedReady();
         return this.prepared.executeQuery();
     }
 
+    /**
+     * Realizar una actualización a la Base de Datos mediante el Prepared
+     * Statement (Sin datos de regreso)
+     *
+     * @throws SQLException Si ocurrió algún error al actualizar la Base de
+     * Datos
+     */
     public void runPreparedUpdate() throws SQLException {
         checkPreparedReady();
         this.prepared.executeUpdate();
     }
 
+    /**
+     * Checa si esta listo el Prepared Statement
+     */
     private void checkPreparedReady() {
         if (!preparedReady) {
             throw new RuntimeException("Prepared Statement not ready yet!");

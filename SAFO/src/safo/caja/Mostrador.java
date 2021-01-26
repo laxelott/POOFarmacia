@@ -16,6 +16,11 @@ public class Mostrador {
     public Mostrador() {
     }
 
+    /**
+     * Muestra los productos especificados
+     *
+     * @param productos Lista de productos a mostrar
+     */
     public void mostrar(Producto[] productos) {
         int limi = productos.length;
 

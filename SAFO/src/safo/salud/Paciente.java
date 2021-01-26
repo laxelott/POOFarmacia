@@ -19,6 +19,12 @@ public class Paciente extends Cliente {
     private short estatura;
     private String[] alergias;
 
+    /**
+     * Obtiene el paciente de la Base de Datos
+     *
+     * @param id ID del paciente a obtener
+     * @throws IdNotFoundException Si no se encontró el paciente
+     */
     public Paciente(int id) throws IdNotFoundException {
         Paciente aux = Conexion.getDBPaciente(id);
         this.setId(aux.getId());

@@ -8,6 +8,7 @@ package safo.db;
 import java.io.Serializable;
 
 /**
+ * POJO que contiene los datos para entrar a la Base de Datos
  *
  * @author Laxelott
  */
@@ -28,7 +29,7 @@ public class DBConnectionData implements Serializable {
     public String getUrl() {
         return this.toString();
     }
-    
+
     public String getConnArgs() {
         return connArgs;
     }

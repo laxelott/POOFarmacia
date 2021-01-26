@@ -23,6 +23,9 @@ public class Receta {
         this.medicamentosRecetados = medicamentosRecetados;
     }
 
+    /**
+     * Registra la receta en la Base de Datos
+     */
     public void registrar() {
         Conexion.insertDBReceta(this);
     }

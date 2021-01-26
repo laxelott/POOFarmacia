@@ -17,7 +17,6 @@ import safo.db.exceptions.IdNotFoundException;
  */
 public class Inventario {
 
-    // TODO Planear con todos
     /*
     Tipos de operaciones:
         0 -> Egreso
@@ -28,6 +27,12 @@ public class Inventario {
     private HashMap<Time, Pair<Integer, Integer>> operaciones;
     private int cantidadDeProducto;
 
+    /**
+     * Constructor que intenta obtener el inventario registrado con la id
+     *
+     * @param id Id a buscar
+     * @throws IdNotFoundException Si no se encontró el inventario especificado
+     */
     public Inventario(int id) throws IdNotFoundException {
         Inventario aux = Conexion.getDBInventario(id);
         this.id = aux.id;
@@ -41,15 +46,21 @@ public class Inventario {
         this.cantidadDeProducto = cantidadDeProductos;
     }
 
+    /**
+     * Registrar los movimientos hechos por el empleado especificado
+     *
+     * @param empleado Empleado que realizó el movimiento
+     * @param cantidad La cantidad de productos movidos (negativo o positivo)
+     */
     public void modificarInventario(Empleado empleado, int cantidad) {
         cantidadDeProducto += cantidad;
         Pair<Integer, Integer> datos;
-        
+
         System.out.println(empleado.getNombre() + " modificó el inventario de " + producto.getNombre());
 
         datos = new Pair(cantidad > 0 ? 1 : 0, cantidad);
         operaciones.put(new Time(System.currentTimeMillis()), datos);
-        
+
         // Registrar a BD
     }
 

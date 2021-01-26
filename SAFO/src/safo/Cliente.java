@@ -22,23 +22,29 @@ public class Cliente {
 
     public Cliente() {
     }
-        
+
+    /**
+     * Obtiene el cliente de la Base de Datos
+     *
+     * @param id ID del cliente a obtener
+     * @throws IdNotFoundException Si no se encontró el cliente
+     */
     public Cliente(int id) throws IdNotFoundException {
         Cliente aux = Conexion.getDBCliente(id);
-        
+
         this.id = aux.id;
         this.nombre = aux.nombre;
         this.rfc = aux.rfc;
         this.edad = aux.edad;
     }
-    
+
     public Cliente(int id, String nombre, String RFC, int edad) {
         this.id = id;
         this.nombre = nombre;
         this.rfc = RFC;
         this.edad = edad;
     }
-    
+
     public void mirar(Mostrador mostrador) {
         System.out.println("Mirando 0-0...");
     }
@@ -74,6 +80,5 @@ public class Cliente {
     public void setEdad(int edad) {
         this.edad = edad;
     }
-    
-    
+
 }

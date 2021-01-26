@@ -6,7 +6,6 @@
 package safo.salud;
 
 import safo.Cliente;
-import safo.caja.Producto;
 import safo.db.Conexion;
 import safo.db.exceptions.IdNotFoundException;
 
@@ -29,20 +28,26 @@ public class Medico {
         this.consultorio = consultorio;
         this.edad = edad;
     }
-    
+
+    /**
+     * Obtiene el medico de la Base de Datos
+     *
+     * @param id ID del medico a obtener
+     * @throws IdNotFoundException Si no se encontró el medico
+     */
     public Medico(int id) throws IdNotFoundException {
         Medico aux = Conexion.getDBMedico(id);
-        
+
         this.id = aux.id;
         this.nombre = aux.nombre;
         this.cedula = aux.cedula;
         this.consultorio = aux.consultorio;
         this.edad = aux.edad;
     }
-    
+
     /**
      * Genera una receta de la consulta
-     * 
+     *
      * @param consulta La consulta a la cual pertenece la receta
      * @param saludable Si el paciente estuvo saludable o no
      * @param medicamentosRecetados Lista de medicamentos recetados
@@ -51,12 +56,13 @@ public class Medico {
     public Receta recetar(Consulta consulta, Boolean saludable, String[] medicamentosRecetados) {
         return new Receta(consulta, saludable, medicamentosRecetados);
     }
-    
+
     /**
-     * 
-     * @param paciente
-     * @param padecimiento
-     * @return 
+     * Genera una nueva consulta por el médico
+     *
+     * @param paciente Paciente al cual pertenece la consulta
+     * @param padecimiento Padecimiento que presenta el paciente
+     * @return Consulta firmada por el médico
      */
     public Consulta realizarConsulta(Paciente paciente, String padecimiento) {
         return new Consulta(this, paciente, padecimiento);

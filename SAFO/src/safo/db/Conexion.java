@@ -30,6 +30,12 @@ import safo.salud.Receta;
 public class Conexion {
 
     /* Inserciones */
+    /**
+     * Registra la receta especificada en la Base de Datos
+     *
+     * @param receta Receta a registrar
+     * @return ID de la receta ya registrada
+     */
     public static int insertDBReceta(Receta receta) {
         ResultSet res;
         cDatos db = new cDatos();
@@ -80,6 +86,12 @@ public class Conexion {
         return id;
     }
 
+    /**
+     * Registra la consulta especificada en la Base de Datos
+     *
+     * @param consulta Consulta a registrar
+     * @return ID de la consulta ya registrada
+     */
     public static int insertDBConsulta(Consulta consulta) {
         ResultSet res;
         cDatos db = new cDatos();
@@ -113,6 +125,13 @@ public class Conexion {
     }
 
     /* Gets */
+    /**
+     * Obtiene un cliente desde la id especificada
+     *
+     * @param id ID a buscar
+     * @return El objeto del cliente encontrado
+     * @throws IdNotFoundException Si no se encontró el cliente
+     */
     public static Cliente getDBCliente(int id) throws IdNotFoundException {
         ResultSet res;
         Cliente cliente = new Cliente(-1, "inexistente", "no", 0);
@@ -146,6 +165,13 @@ public class Conexion {
         return cliente;
     }
 
+    /**
+     * Obtiene un medico desde la id especificada
+     *
+     * @param id ID a buscar
+     * @return El objeto del medico encontrado
+     * @throws IdNotFoundException Si no se encontró el medico
+     */
     public static Medico getDBMedico(int id) throws IdNotFoundException {
         ResultSet res;
         Medico medico = new Medico(1, "no-existe", "nope", -1, 0);
@@ -174,6 +200,13 @@ public class Conexion {
         return medico;
     }
 
+    /**
+     * Obtiene un paciente desde la id especificada
+     *
+     * @param id ID a buscar
+     * @return El objeto del paciente encontrado
+     * @throws IdNotFoundException Si no se encontró el paciente
+     */
     public static Paciente getDBPaciente(int id) throws IdNotFoundException {
         ResultSet res;
         Paciente paciente = new Paciente(1, "sin-nombre", "no", 0, (short) 0, (short) 0, new String[0]);
@@ -211,6 +244,12 @@ public class Conexion {
         return paciente;
     }
 
+    /**
+     * Obtiene las alergias del paciente con la id especificada
+     *
+     * @param idPaciente ID del paciente dueño de las alergias a buscar
+     * @return Arreglo de las alergias registradas al paciente
+     */
     public static String[] getDBAlergias(int idPaciente) {
         ResultSet res;
         ArrayList<String> alergias = new ArrayList();
@@ -238,6 +277,13 @@ public class Conexion {
         return alergias.toArray(new String[0]);
     }
 
+    /**
+     * Obtiene un inventario desde la id especificada
+     *
+     * @param id ID a buscar
+     * @return El objeto del inventario encontrado
+     * @throws IdNotFoundException Si no se encontró el inventario
+     */
     public static Inventario getDBInventario(int id) throws IdNotFoundException {
         ResultSet res;
         Inventario inventario = new Inventario(-1, new Producto(-1, "inexistente", 0d), 0);
@@ -246,7 +292,7 @@ public class Conexion {
         try {
             db.open();
 
-             // TODO crear view para esta consulta
+            // TODO crear view para esta consulta
             db.setPreparedStatement("SELECT inventario.id AS invID, inventario.cantidad, productos.id AS prodID, productos.nombre, productos.precio FROM inventario\n"
                     + "	INNER JOIN productos\n"
                     + "		ON inventario.id_producto = productos.id\n"
@@ -278,6 +324,15 @@ public class Conexion {
         return inventario;
     }
 
+    /**
+     * Intenta obtener el empleado de la Base de Datos con las credenciales
+     * especificadas
+     *
+     * @param username Nombre de usuario
+     * @param password HashCode de la contraseña
+     * @return Empleado con las credenciales proveídas
+     * @throws WrongCredentialsException Si las credenciales son inválidas
+     */
     public static Empleado getDBEmpleado(String username, int password) throws WrongCredentialsException {
         Empleado empleado = new Empleado("sin-nombre", "no", password, new Time[0]);
         cDatos db = new cDatos();

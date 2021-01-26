@@ -29,28 +29,6 @@ public class main {
         Scanner in = new Scanner(System.in);
         String input;
 
-/*        
-        try (OutputStream output = new FileOutputStream("safo.config")) {
-
-            Properties prop = new Properties();
-
-            // set the properties value
-            prop.setProperty("db.url", "127.0.0.1");
-            prop.setProperty("db.port", "3306");
-            prop.setProperty("db.name", "safo");
-            prop.setProperty("db.user", "root");
-            prop.setProperty("db.password", "n0m3l0");
-
-            // save properties to project root folder
-            prop.store(output, null);
-
-        } catch (IOException ex) {
-            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-  */      
-
-    generarReceta();
-
         while (true) {
             if (obtenerEmpleado()) {
                 break;
@@ -89,6 +67,11 @@ public class main {
         }
     }
 
+    /**
+     * Pretende inicar sesión de empleado
+     *
+     * @return si se pudo iniciar sesión
+     */
     private static boolean obtenerEmpleado() {
         // Pide id del paciente, y te regresa sus datos
         Scanner in = new Scanner(System.in);
@@ -117,6 +100,9 @@ public class main {
         return result;
     }
 
+    /**
+     * Genera una receta de los datos proveídos por el usuario
+     */
     private static void generarReceta() {
         try {
             // Pide id del paciente, y te regresa sus datos
@@ -166,6 +152,9 @@ public class main {
         }
     }
 
+    /**
+     * Pregunta la id y regresa los datos de un paciente
+     */
     private static void obtenerPaciente() {
         // Pide id del paciente, y te regresa sus datos
         Scanner in = new Scanner(System.in);

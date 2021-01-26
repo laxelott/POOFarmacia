@@ -13,18 +13,26 @@ import safo.db.Conexion;
  * @author Laxelott
  */
 public class Consulta {
+
     private int id;
     private Medico medico;
     private Paciente paciente;
-    private Timestamp  hora;
+    private Timestamp hora;
     private String padecimiento;
 
+    /**
+     * Inserta la consulta especificada en la Base de Datos
+     *
+     * @param medico Medico que realizó la consulta
+     * @param paciente Paciente que pertenece a la consulta
+     * @param padecimiento Padecimiento que presentó el paciente
+     */
     public Consulta(Medico medico, Paciente paciente, String padecimiento) {
         this.medico = medico;
         this.paciente = paciente;
         this.padecimiento = padecimiento;
         this.hora = new Timestamp(System.currentTimeMillis());
-        
+
         System.out.println(padecimiento);
         this.id = Conexion.insertDBConsulta(this);
     }
@@ -36,7 +44,7 @@ public class Consulta {
     public void setId(int id) {
         this.id = id;
     }
-    
+
     public Medico getMedico() {
         return medico;
     }
@@ -68,7 +76,5 @@ public class Consulta {
     public void setPadecimiento(String padecimiento) {
         this.padecimiento = padecimiento;
     }
-    
-    
-    
+
 }
