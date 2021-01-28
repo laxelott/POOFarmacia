@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Server version:               10.1.40-MariaDB - mariadb.org binary distribution
+-- Server version:               8.0.23 - MySQL Community Server - GPL
 -- Server OS:                    Win64
 -- HeidiSQL Version:             11.0.0.5919
 -- --------------------------------------------------------
@@ -13,12 +13,13 @@
 
 
 -- Dumping database structure for safo
-CREATE DATABASE IF NOT EXISTS `safo` /*!40100 DEFAULT CHARACTER SET latin1 */;
+DROP DATABASE IF EXISTS `safo`;
+CREATE DATABASE IF NOT EXISTS `safo` /*!40100 DEFAULT CHARACTER SET latin1 */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `safo`;
 
 -- Dumping structure for table safo.alergias
 CREATE TABLE IF NOT EXISTS `alergias` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `nombre` char(50) NOT NULL,
   `descripcion` text,
   PRIMARY KEY (`id`)
@@ -76,13 +77,13 @@ INSERT INTO `alergias` (`id`, `nombre`, `descripcion`) VALUES
 -- Dumping structure for view safo.alergias_pacientes
 -- Creating temporary table to overcome VIEW dependency errors
 CREATE TABLE `alergias_pacientes` (
-	`id` INT(11) NOT NULL,
+	`id` INT(10,0) NOT NULL,
 	`nombre` CHAR(50) NOT NULL COLLATE 'latin1_swedish_ci'
 ) ENGINE=MyISAM;
 
 -- Dumping structure for table safo.analisis
 CREATE TABLE IF NOT EXISTS `analisis` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `tipo_analisis` text,
   `muestras_requeridas` text,
   PRIMARY KEY (`id`)
@@ -130,12 +131,12 @@ INSERT INTO `analisis` (`id`, `tipo_analisis`, `muestras_requeridas`) VALUES
 
 -- Dumping structure for table safo.caja
 CREATE TABLE IF NOT EXISTS `caja` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_empleado` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_empleado` int NOT NULL,
   `corte` date NOT NULL,
   `egreso` double NOT NULL,
   `ingreso` double NOT NULL,
-  `id_descuento` int(11) DEFAULT NULL,
+  `id_descuento` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_descuento` (`id_descuento`),
   KEY `id_empleado` (`id_empleado`),
@@ -250,10 +251,10 @@ INSERT INTO `caja` (`id`, `id_empleado`, `corte`, `egreso`, `ingreso`, `id_descu
 
 -- Dumping structure for table safo.clientes
 CREATE TABLE IF NOT EXISTS `clientes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `nombre` char(100) NOT NULL,
   `rfc` char(13) DEFAULT 'MOMV990405',
-  `edad` int(11) NOT NULL,
+  `edad` int NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=latin1;
 
@@ -364,149 +365,161 @@ INSERT INTO `clientes` (`id`, `nombre`, `rfc`, `edad`) VALUES
 
 -- Dumping structure for table safo.consultas
 CREATE TABLE IF NOT EXISTS `consultas` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_medico` int(11) NOT NULL,
-  `id_paciente` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_medico` int NOT NULL,
+  `id_paciente` int NOT NULL,
   `fecha_hora` datetime NOT NULL,
   `padecimiento` text,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `fecha_hora` (`fecha_hora`),
+  UNIQUE KEY `id` (`id`),
   KEY `id_paciente` (`id_paciente`),
   KEY `id_medico` (`id_medico`),
   CONSTRAINT `consultas_ibfk_1` FOREIGN KEY (`id_paciente`) REFERENCES `pacientes` (`id`),
   CONSTRAINT `consultas_ibfk_2` FOREIGN KEY (`id_medico`) REFERENCES `medicos` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=latin1;
 
--- Dumping data for table safo.consultas: ~103 rows (approximately)
+-- Dumping data for table safo.consultas: ~109 rows (approximately)
 /*!40000 ALTER TABLE `consultas` DISABLE KEYS */;
 INSERT INTO `consultas` (`id`, `id_medico`, `id_paciente`, `fecha_hora`, `padecimiento`) VALUES
-	(1, 2, 21, '2003-12-20 00:00:00', 'risus. In mi pede, nonummy ut, molestie in, tempus eu, ligula.'),
-	(2, 8, 25, '2004-06-21 00:00:00', 'nunc id enim. Curabitur massa. Vestibulum accumsan neque et'),
-	(3, 6, 3, '0000-00-00 00:00:00', 'Vivamus molestie dapibus ligula. Aliquam erat volutpat. Nulla'),
-	(4, 5, 32, '0000-00-00 00:00:00', 'Integer sem elit, pharetra ut, pharetra sed,'),
-	(5, 5, 36, '2002-04-21 00:00:00', 'tristique aliquet. Phasellus fermentum convallis'),
-	(6, 5, 35, '2008-04-20 00:00:00', 'dui. Cras pellentesque. Sed dictum. Proin eget odio. Aliquam vulputate ullamcorper'),
-	(7, 2, 13, '2003-11-21 00:00:00', 'varius et, euismod et, commodo at, libero. Morbi accumsan laoreet ipsum. Curabitur consequat, lectus sit'),
-	(8, 2, 36, '0000-00-00 00:00:00', 'libero. Integer in magna. Phasellus dolor elit, pellentesque a, facilisis non, bibendum sed,'),
-	(9, 4, 20, '0000-00-00 00:00:00', 'egestas. Duis ac arcu. Nunc mauris. Morbi'),
-	(10, 3, 10, '0000-00-00 00:00:00', 'ac mi eleifend egestas. Sed'),
-	(11, 8, 41, '0000-00-00 00:00:00', 'justo eu arcu. Morbi sit'),
-	(12, 4, 4, '2008-11-20 00:00:00', 'purus gravida sagittis. Duis gravida. Praesent eu nulla at sem molestie'),
-	(13, 5, 25, '2010-10-21 00:00:00', 'netus et malesuada fames ac turpis egestas. Aliquam fringilla cursus purus. Nullam scelerisque neque sed'),
-	(14, 2, 11, '0000-00-00 00:00:00', 'mauris, rhoncus id, mollis nec, cursus a, enim. Suspendisse aliquet, sem ut cursus luctus,'),
-	(15, 5, 22, '2002-01-21 00:00:00', 'imperdiet non, vestibulum nec, euismod in, dolor. Fusce'),
-	(16, 6, 13, '2008-04-21 00:00:00', 'Proin non massa non ante bibendum ullamcorper. Duis cursus,'),
-	(17, 2, 5, '2004-02-20 00:00:00', 'primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec tincidunt.'),
-	(18, 2, 22, '0000-00-00 00:00:00', 'non, sollicitudin a, malesuada id, erat. Etiam vestibulum massa rutrum magna.'),
-	(19, 5, 26, '0000-00-00 00:00:00', 'augue malesuada malesuada.'),
-	(20, 1, 13, '2010-02-20 00:00:00', 'Phasellus at augue id ante dictum cursus. Nunc'),
-	(21, 1, 35, '2003-10-20 00:00:00', 'ipsum. Phasellus vitae mauris sit amet lorem semper'),
-	(22, 1, 6, '2008-01-20 00:00:00', 'vitae, aliquet nec, imperdiet nec, leo. Morbi neque tellus, imperdiet non,'),
-	(23, 4, 15, '0000-00-00 00:00:00', 'in lobortis tellus'),
-	(24, 6, 23, '0000-00-00 00:00:00', 'In at pede. Cras vulputate velit eu sem. Pellentesque ut ipsum ac mi'),
-	(25, 4, 4, '2007-02-20 00:00:00', 'taciti'),
-	(26, 3, 36, '2003-11-21 00:00:00', 'fames ac turpis egestas. Aliquam fringilla cursus purus. Nullam scelerisque neque sed sem egestas blandit.'),
-	(27, 6, 31, '0000-00-00 00:00:00', 'fringilla. Donec feugiat metus sit amet ante. Vivamus non lorem vitae odio'),
-	(28, 4, 6, '0000-00-00 00:00:00', 'Fusce'),
-	(29, 7, 44, '0000-00-00 00:00:00', 'placerat eget, venenatis a, magna. Lorem ipsum dolor sit amet, consectetuer adipiscing'),
-	(30, 1, 41, '0000-00-00 00:00:00', 'ipsum. Curabitur consequat, lectus sit amet luctus vulputate,'),
-	(31, 3, 8, '2007-02-21 00:00:00', 'pharetra, felis eget'),
-	(32, 1, 15, '0000-00-00 00:00:00', 'in felis. Nulla tempor'),
-	(33, 5, 44, '0000-00-00 00:00:00', 'eleifend. Cras sed leo. Cras vehicula'),
-	(34, 4, 1, '2011-08-20 00:00:00', 'hendrerit consectetuer,'),
-	(35, 7, 16, '0000-00-00 00:00:00', 'faucibus. Morbi'),
-	(36, 8, 10, '2004-12-20 00:00:00', 'pede. Cras vulputate velit eu'),
-	(37, 6, 6, '2011-10-21 00:00:00', 'at, libero. Morbi accumsan laoreet ipsum. Curabitur consequat,'),
-	(38, 5, 21, '0000-00-00 00:00:00', 'at arcu. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;'),
-	(39, 6, 26, '2006-01-21 00:00:00', 'dui nec urna suscipit nonummy. Fusce fermentum fermentum arcu.'),
-	(40, 6, 16, '0000-00-00 00:00:00', 'consequat purus. Maecenas'),
-	(41, 4, 4, '0000-00-00 00:00:00', 'ut, pellentesque eget, dictum placerat, augue. Sed molestie. Sed id risus'),
-	(42, 4, 1, '0000-00-00 00:00:00', 'ut'),
-	(43, 2, 14, '0000-00-00 00:00:00', 'libero. Integer'),
-	(44, 5, 43, '2005-10-21 00:00:00', 'Vivamus molestie dapibus ligula. Aliquam erat volutpat. Nulla dignissim. Maecenas'),
-	(45, 4, 2, '0000-00-00 00:00:00', 'Aliquam auctor, velit eget laoreet posuere,'),
-	(46, 6, 31, '2004-12-21 00:00:00', 'et ipsum cursus vestibulum. Mauris magna. Duis dignissim tempor'),
-	(47, 4, 5, '0000-00-00 00:00:00', 'dui nec urna suscipit nonummy. Fusce fermentum fermentum arcu. Vestibulum'),
-	(48, 1, 4, '0000-00-00 00:00:00', 'ornare, libero at auctor ullamcorper, nisl'),
-	(49, 5, 24, '0000-00-00 00:00:00', 'congue turpis.'),
-	(50, 3, 42, '2007-10-20 00:00:00', 'tellus. Phasellus elit pede, malesuada vel, venenatis vel, faucibus id, libero. Donec consectetuer mauris id'),
-	(51, 2, 16, '0000-00-00 00:00:00', 'sed, facilisis vitae,'),
-	(52, 5, 28, '0000-00-00 00:00:00', 'vulputate ullamcorper magna. Sed eu eros.'),
-	(53, 4, 17, '2002-02-20 00:00:00', 'vel arcu eu odio tristique pharetra. Quisque'),
-	(54, 8, 24, '2008-09-21 00:00:00', 'felis eget varius ultrices, mauris ipsum porta elit,'),
-	(55, 6, 22, '0000-00-00 00:00:00', 'lectus pede et risus. Quisque libero lacus, varius et, euismod et, commodo at,'),
-	(56, 8, 20, '2005-03-21 00:00:00', 'a odio'),
-	(57, 3, 38, '0000-00-00 00:00:00', 'Vestibulum accumsan neque et nunc.'),
-	(58, 5, 13, '0000-00-00 00:00:00', 'Integer vitae'),
-	(59, 8, 6, '2002-09-20 00:00:00', 'natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean eget magna.'),
-	(60, 3, 42, '2003-08-21 00:00:00', 'massa. Suspendisse eleifend. Cras sed leo. Cras vehicula aliquet libero. Integer'),
-	(61, 2, 6, '0000-00-00 00:00:00', 'laoreet lectus quis massa. Mauris vestibulum, neque sed dictum eleifend, nunc risus varius orci, in'),
-	(62, 4, 9, '2004-12-21 00:00:00', 'Nunc ullamcorper, velit in aliquet lobortis, nisi nibh lacinia orci,'),
-	(63, 1, 20, '0000-00-00 00:00:00', 'elit, dictum eu, eleifend nec, malesuada ut, sem. Nulla interdum.'),
-	(64, 4, 24, '2009-08-21 00:00:00', 'amet lorem semper'),
-	(65, 1, 3, '2008-06-21 00:00:00', 'tellus. Phasellus elit pede, malesuada vel, venenatis'),
-	(66, 3, 31, '0000-00-00 00:00:00', 'Vivamus rhoncus. Donec est.'),
-	(67, 3, 16, '2012-04-21 00:00:00', 'risus. Nulla eget metus eu erat semper'),
-	(68, 3, 43, '0000-00-00 00:00:00', 'Nunc ullamcorper, velit in aliquet lobortis, nisi'),
-	(69, 5, 35, '0000-00-00 00:00:00', 'egestas. Aliquam nec enim. Nunc ut erat. Sed nunc est, mollis'),
-	(70, 8, 39, '0000-00-00 00:00:00', 'Curae; Phasellus ornare. Fusce mollis.'),
-	(71, 8, 13, '0000-00-00 00:00:00', 'urna convallis erat, eget tincidunt dui augue eu tellus. Phasellus elit'),
-	(72, 6, 41, '0000-00-00 00:00:00', 'elit sed consequat auctor, nunc nulla vulputate dui,'),
-	(73, 3, 24, '0000-00-00 00:00:00', 'faucibus. Morbi'),
-	(74, 4, 35, '0000-00-00 00:00:00', 'iaculis aliquet diam.'),
-	(75, 8, 30, '2004-08-21 00:00:00', 'per conubia nostra, per inceptos hymenaeos. Mauris ut quam vel sapien'),
-	(76, 4, 26, '0000-00-00 00:00:00', 'orci lacus'),
-	(77, 2, 28, '0000-00-00 00:00:00', 'non quam. Pellentesque habitant'),
-	(78, 2, 24, '0000-00-00 00:00:00', 'ornare placerat, orci lacus vestibulum lorem, sit amet ultricies sem magna nec quam. Curabitur'),
-	(79, 2, 30, '0000-00-00 00:00:00', 'dolor sit amet, consectetuer adipiscing elit. Aliquam auctor, velit eget laoreet posuere,'),
-	(80, 4, 40, '0000-00-00 00:00:00', 'dolor egestas rhoncus. Proin nisl sem, consequat nec, mollis vitae, posuere at, velit. Cras lorem'),
-	(81, 8, 43, '2009-03-21 00:00:00', 'cursus vestibulum. Mauris magna. Duis dignissim tempor arcu. Vestibulum ut eros non enim commodo hendrerit.'),
-	(82, 6, 9, '2006-08-20 00:00:00', 'erat volutpat. Nulla dignissim. Maecenas ornare'),
-	(83, 4, 41, '0000-00-00 00:00:00', 'non, bibendum sed, est. Nunc laoreet lectus quis'),
-	(84, 6, 34, '2001-10-21 00:00:00', 'Cras dictum ultricies ligula. Nullam enim. Sed nulla ante, iaculis nec, eleifend non,'),
-	(85, 4, 29, '0000-00-00 00:00:00', 'mauris sapien, cursus in, hendrerit consectetuer, cursus et, magna.'),
-	(86, 7, 4, '2010-08-21 00:00:00', 'auctor ullamcorper, nisl arcu'),
-	(87, 6, 42, '2012-02-21 00:00:00', 'in consequat enim diam vel arcu. Curabitur ut odio vel est'),
-	(88, 2, 2, '0000-00-00 00:00:00', 'nunc'),
-	(89, 1, 27, '0000-00-00 00:00:00', 'vulputate, nisi sem semper erat,'),
-	(90, 5, 18, '0000-00-00 00:00:00', 'aliquet diam. Sed diam lorem, auctor quis, tristique'),
-	(91, 4, 30, '2001-06-22 00:00:00', 'at, velit. Pellentesque ultricies dignissim lacus. Aliquam rutrum lorem ac'),
-	(92, 5, 19, '0000-00-00 00:00:00', 'Donec non justo. Proin non massa non ante bibendum ullamcorper. Duis'),
-	(93, 8, 22, '0000-00-00 00:00:00', 'lectus ante dictum mi, ac'),
-	(94, 7, 15, '0000-00-00 00:00:00', 'amet nulla. Donec non justo. Proin non massa non ante bibendum ullamcorper. Duis cursus,'),
-	(95, 2, 33, '2005-09-20 00:00:00', 'ultrices a, auctor'),
-	(96, 8, 14, '2012-03-20 00:00:00', 'eu, eleifend nec, malesuada ut, sem. Nulla interdum. Curabitur dictum. Phasellus in'),
-	(97, 3, 1, '0000-00-00 00:00:00', 'nulla magna, malesuada vel, convallis in, cursus et, eros. Proin'),
-	(98, 8, 33, '2001-04-22 00:00:00', 'imperdiet, erat nonummy ultricies ornare, elit elit fermentum risus, at fringilla'),
-	(99, 5, 18, '0000-00-00 00:00:00', 'nisi magna sed dui. Fusce aliquam, enim'),
-	(100, 7, 40, '0000-00-00 00:00:00', 'Cras eu tellus eu augue porttitor interdum. Sed auctor odio a'),
-	(101, 3, 2, '2021-01-24 20:02:55', 'Tiene lombrices :('),
-	(102, 3, 2, '2021-01-24 20:06:03', 'kolakola '),
-	(103, 3, 2, '2021-01-25 01:13:29', 'no funciona');
+	(1, 2, 21, '2013-03-22 06:06:33', 'risus. In mi pede, nonummy ut, molestie in, tempus eu, ligula.'),
+	(2, 8, 25, '2021-01-01 05:05:42', 'nunc id enim. Curabitur massa. Vestibulum accumsan neque et'),
+	(3, 6, 3, '2016-05-18 03:03:40', 'Vivamus molestie dapibus ligula. Aliquam erat volutpat. Nulla'),
+	(4, 5, 32, '2020-12-22 21:21:56', 'Integer sem elit, pharetra ut, pharetra sed,'),
+	(5, 5, 36, '2016-08-08 00:00:55', 'tristique aliquet. Phasellus fermentum convallis'),
+	(6, 5, 35, '2011-09-16 04:04:51', 'dui. Cras pellentesque. Sed dictum. Proin eget odio. Aliquam vulputate ullamcorper'),
+	(7, 2, 13, '2015-08-21 21:21:18', 'varius et, euismod et, commodo at, libero. Morbi accumsan laoreet ipsum. Curabitur consequat, lectus sit'),
+	(8, 2, 36, '2020-07-28 00:00:32', 'libero. Integer in magna. Phasellus dolor elit, pellentesque a, facilisis non, bibendum sed,'),
+	(9, 4, 20, '2018-07-12 04:04:15', 'egestas. Duis ac arcu. Nunc mauris. Morbi'),
+	(10, 3, 10, '2016-05-30 11:11:35', 'ac mi eleifend egestas. Sed'),
+	(11, 8, 41, '2011-11-05 09:09:07', 'justo eu arcu. Morbi sit'),
+	(12, 4, 4, '2020-05-24 05:05:01', 'purus gravida sagittis. Duis gravida. Praesent eu nulla at sem molestie'),
+	(13, 5, 25, '2012-01-29 06:06:29', 'netus et malesuada fames ac turpis egestas. Aliquam fringilla cursus purus. Nullam scelerisque neque sed'),
+	(14, 2, 11, '2016-09-07 00:00:26', 'mauris, rhoncus id, mollis nec, cursus a, enim. Suspendisse aliquet, sem ut cursus luctus,'),
+	(15, 5, 22, '2020-04-08 16:16:56', 'imperdiet non, vestibulum nec, euismod in, dolor. Fusce'),
+	(16, 6, 13, '2016-05-12 00:00:19', 'Proin non massa non ante bibendum ullamcorper. Duis cursus,'),
+	(17, 2, 5, '2010-03-14 23:23:47', 'primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec tincidunt.'),
+	(18, 2, 22, '2019-05-01 17:17:02', 'non, sollicitudin a, malesuada id, erat. Etiam vestibulum massa rutrum magna.'),
+	(19, 5, 26, '2011-02-07 18:18:15', 'augue malesuada malesuada.'),
+	(20, 1, 13, '2018-10-01 08:08:56', 'Phasellus at augue id ante dictum cursus. Nunc'),
+	(21, 1, 35, '2013-03-10 08:08:54', 'ipsum. Phasellus vitae mauris sit amet lorem semper'),
+	(22, 1, 6, '2020-03-14 12:12:48', 'vitae, aliquet nec, imperdiet nec, leo. Morbi neque tellus, imperdiet non,'),
+	(23, 4, 15, '2011-08-06 12:12:36', 'in lobortis tellus'),
+	(24, 6, 23, '2020-05-04 15:15:02', 'In at pede. Cras vulputate velit eu sem. Pellentesque ut ipsum ac mi'),
+	(25, 4, 4, '2019-06-04 03:03:21', 'taciti'),
+	(26, 3, 36, '2019-12-14 03:03:06', 'fames ac turpis egestas. Aliquam fringilla cursus purus. Nullam scelerisque neque sed sem egestas blandit.'),
+	(27, 6, 31, '2012-05-04 12:12:46', 'fringilla. Donec feugiat metus sit amet ante. Vivamus non lorem vitae odio'),
+	(28, 4, 6, '2019-03-13 12:12:06', 'Fusce'),
+	(29, 7, 44, '2017-11-08 18:18:42', 'placerat eget, venenatis a, magna. Lorem ipsum dolor sit amet, consectetuer adipiscing'),
+	(30, 1, 41, '2011-10-15 03:03:29', 'ipsum. Curabitur consequat, lectus sit amet luctus vulputate,'),
+	(31, 3, 8, '2010-06-18 22:22:08', 'pharetra, felis eget'),
+	(32, 1, 15, '2019-04-09 15:15:57', 'in felis. Nulla tempor'),
+	(33, 5, 44, '2013-12-16 01:01:44', 'eleifend. Cras sed leo. Cras vehicula'),
+	(34, 4, 1, '2015-04-23 06:06:39', 'hendrerit consectetuer,'),
+	(35, 7, 16, '2013-02-27 09:09:44', 'faucibus. Morbi'),
+	(36, 8, 10, '2013-06-16 06:06:33', 'pede. Cras vulputate velit eu'),
+	(37, 6, 6, '2011-05-08 16:16:34', 'at, libero. Morbi accumsan laoreet ipsum. Curabitur consequat,'),
+	(38, 5, 21, '2010-01-25 04:04:39', 'at arcu. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;'),
+	(39, 6, 26, '2017-07-15 05:05:22', 'dui nec urna suscipit nonummy. Fusce fermentum fermentum arcu.'),
+	(40, 6, 16, '2018-04-20 17:17:27', 'consequat purus. Maecenas'),
+	(41, 4, 4, '2013-03-10 13:13:41', 'ut, pellentesque eget, dictum placerat, augue. Sed molestie. Sed id risus'),
+	(42, 4, 1, '2011-04-27 13:13:23', 'ut'),
+	(43, 2, 14, '2020-03-18 00:00:11', 'libero. Integer'),
+	(44, 5, 43, '2014-10-12 02:02:48', 'Vivamus molestie dapibus ligula. Aliquam erat volutpat. Nulla dignissim. Maecenas'),
+	(45, 4, 2, '2019-11-06 03:03:06', 'Aliquam auctor, velit eget laoreet posuere,'),
+	(46, 6, 31, '2015-10-30 02:02:29', 'et ipsum cursus vestibulum. Mauris magna. Duis dignissim tempor'),
+	(47, 4, 5, '2012-10-13 20:20:25', 'dui nec urna suscipit nonummy. Fusce fermentum fermentum arcu. Vestibulum'),
+	(48, 1, 4, '2018-09-28 20:20:03', 'ornare, libero at auctor ullamcorper, nisl'),
+	(49, 5, 24, '2011-08-21 16:16:26', 'congue turpis.'),
+	(50, 3, 42, '2016-01-25 02:02:08', 'tellus. Phasellus elit pede, malesuada vel, venenatis vel, faucibus id, libero. Donec consectetuer mauris id'),
+	(51, 2, 16, '2014-02-19 08:08:15', 'sed, facilisis vitae,'),
+	(52, 5, 28, '2010-02-07 20:20:15', 'vulputate ullamcorper magna. Sed eu eros.'),
+	(53, 4, 17, '2016-07-21 20:20:28', 'vel arcu eu odio tristique pharetra. Quisque'),
+	(54, 8, 24, '2019-02-22 09:09:53', 'felis eget varius ultrices, mauris ipsum porta elit,'),
+	(55, 6, 22, '2019-07-27 16:16:21', 'lectus pede et risus. Quisque libero lacus, varius et, euismod et, commodo at,'),
+	(56, 8, 20, '2010-03-07 09:09:11', 'a odio'),
+	(57, 3, 38, '2016-11-05 08:08:12', 'Vestibulum accumsan neque et nunc.'),
+	(58, 5, 13, '2010-11-25 02:02:53', 'Integer vitae'),
+	(59, 8, 6, '2020-06-19 15:15:26', 'natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean eget magna.'),
+	(60, 3, 42, '2011-04-14 01:01:03', 'massa. Suspendisse eleifend. Cras sed leo. Cras vehicula aliquet libero. Integer'),
+	(61, 2, 6, '2020-06-07 15:15:15', 'laoreet lectus quis massa. Mauris vestibulum, neque sed dictum eleifend, nunc risus varius orci, in'),
+	(62, 4, 9, '2015-05-08 01:01:09', 'Nunc ullamcorper, velit in aliquet lobortis, nisi nibh lacinia orci,'),
+	(63, 1, 20, '2016-06-10 17:17:38', 'elit, dictum eu, eleifend nec, malesuada ut, sem. Nulla interdum.'),
+	(64, 4, 24, '2019-06-13 12:12:38', 'amet lorem semper'),
+	(65, 1, 3, '2019-12-12 14:14:44', 'tellus. Phasellus elit pede, malesuada vel, venenatis'),
+	(66, 3, 31, '2012-02-18 11:11:44', 'Vivamus rhoncus. Donec est.'),
+	(67, 3, 16, '2020-03-30 21:21:28', 'risus. Nulla eget metus eu erat semper'),
+	(68, 3, 43, '2010-10-14 14:14:21', 'Nunc ullamcorper, velit in aliquet lobortis, nisi'),
+	(69, 5, 35, '2019-04-09 20:20:58', 'egestas. Aliquam nec enim. Nunc ut erat. Sed nunc est, mollis'),
+	(70, 8, 39, '2014-10-25 06:06:22', 'Curae; Phasellus ornare. Fusce mollis.'),
+	(71, 8, 13, '2015-02-10 15:15:03', 'urna convallis erat, eget tincidunt dui augue eu tellus. Phasellus elit'),
+	(72, 6, 41, '2018-07-15 04:04:45', 'elit sed consequat auctor, nunc nulla vulputate dui,'),
+	(73, 3, 24, '2014-05-07 21:21:23', 'faucibus. Morbi'),
+	(74, 4, 35, '2014-07-27 00:00:06', 'iaculis aliquet diam.'),
+	(75, 8, 30, '2018-04-18 08:08:44', 'per conubia nostra, per inceptos hymenaeos. Mauris ut quam vel sapien'),
+	(76, 4, 26, '2011-09-19 17:17:33', 'orci lacus'),
+	(77, 2, 28, '2014-10-13 16:16:01', 'non quam. Pellentesque habitant'),
+	(78, 2, 24, '2019-06-14 11:11:48', 'ornare placerat, orci lacus vestibulum lorem, sit amet ultricies sem magna nec quam. Curabitur'),
+	(79, 2, 30, '2016-03-10 03:03:30', 'dolor sit amet, consectetuer adipiscing elit. Aliquam auctor, velit eget laoreet posuere,'),
+	(80, 4, 40, '2017-12-14 00:00:58', 'dolor egestas rhoncus. Proin nisl sem, consequat nec, mollis vitae, posuere at, velit. Cras lorem'),
+	(81, 8, 43, '2012-06-30 07:07:04', 'cursus vestibulum. Mauris magna. Duis dignissim tempor arcu. Vestibulum ut eros non enim commodo hendrerit.'),
+	(82, 6, 9, '2020-07-03 01:01:47', 'erat volutpat. Nulla dignissim. Maecenas ornare'),
+	(83, 4, 41, '2015-06-13 23:23:56', 'non, bibendum sed, est. Nunc laoreet lectus quis'),
+	(84, 6, 34, '2017-07-25 06:06:02', 'Cras dictum ultricies ligula. Nullam enim. Sed nulla ante, iaculis nec, eleifend non,'),
+	(85, 4, 29, '2010-03-05 03:03:34', 'mauris sapien, cursus in, hendrerit consectetuer, cursus et, magna.'),
+	(86, 7, 4, '2016-01-17 07:07:36', 'auctor ullamcorper, nisl arcu'),
+	(87, 6, 42, '2013-02-24 08:08:48', 'in consequat enim diam vel arcu. Curabitur ut odio vel est'),
+	(88, 2, 2, '2015-05-25 11:11:13', 'nunc'),
+	(89, 1, 27, '2018-02-12 08:08:37', 'vulputate, nisi sem semper erat,'),
+	(90, 5, 18, '2018-12-07 07:07:32', 'aliquet diam. Sed diam lorem, auctor quis, tristique'),
+	(91, 4, 30, '2011-03-23 05:05:40', 'at, velit. Pellentesque ultricies dignissim lacus. Aliquam rutrum lorem ac'),
+	(92, 5, 19, '2020-10-07 21:21:30', 'Donec non justo. Proin non massa non ante bibendum ullamcorper. Duis'),
+	(93, 8, 22, '2013-10-05 00:00:03', 'lectus ante dictum mi, ac'),
+	(94, 7, 15, '2012-02-12 04:04:02', 'amet nulla. Donec non justo. Proin non massa non ante bibendum ullamcorper. Duis cursus,'),
+	(95, 2, 33, '2012-03-03 05:05:12', 'ultrices a, auctor'),
+	(96, 8, 14, '2015-09-02 07:07:42', 'eu, eleifend nec, malesuada ut, sem. Nulla interdum. Curabitur dictum. Phasellus in'),
+	(97, 3, 1, '2014-02-24 02:02:20', 'nulla magna, malesuada vel, convallis in, cursus et, eros. Proin'),
+	(98, 8, 33, '2020-01-30 19:19:59', 'imperdiet, erat nonummy ultricies ornare, elit elit fermentum risus, at fringilla'),
+	(99, 5, 18, '2011-06-20 05:05:35', 'nisi magna sed dui. Fusce aliquam, enim'),
+	(100, 7, 40, '2010-05-04 21:21:25', 'Cras eu tellus eu augue porttitor interdum. Sed auctor odio a'),
+	(101, 3, 2, '2012-07-26 18:18:48', 'Tiene lombrices :('),
+	(102, 3, 2, '2014-08-10 17:17:30', 'kolakola '),
+	(103, 3, 2, '2020-04-10 11:11:28', 'no funciona'),
+	(104, 3, 2, '2015-08-22 05:05:43', 'nada'),
+	(112, 3, 2, '2013-09-16 04:04:51', 'Algo más'),
+	(113, 3, 2, '2010-08-21 21:21:18', 'Algo más'),
+	(114, 3, 2, '2021-01-25 16:47:20', 'no'),
+	(115, 3, 2, '2021-01-25 18:34:08', 'no'),
+	(116, 3, 2, '2021-01-25 18:34:23', 'no'),
+	(117, 3, 4, '2021-01-28 14:19:47', 'estaba rojo'),
+	(118, 3, 4, '2021-01-28 14:19:49', 'estaba rojo'),
+	(119, 3, 4, '2021-01-28 14:24:11', 'Ahora está azul :c'),
+	(120, 3, 4, '2021-01-28 14:29:05', 'El paciente estaba morado pero también azul, no sé que hacer, ayuda :C');
 /*!40000 ALTER TABLE `consultas` ENABLE KEYS */;
 
 -- Dumping structure for view safo.consultas_medicamentos
 -- Creating temporary table to overcome VIEW dependency errors
 CREATE TABLE `consultas_medicamentos` (
-	`id_consulta` INT(11) NOT NULL,
-	`id_medico` INT(11) NOT NULL,
-	`id_paciente` INT(11) NOT NULL,
+	`id_consulta` INT(10,0) NOT NULL,
+	`id_medico` INT(10,0) NOT NULL,
+	`id_paciente` INT(10,0) NOT NULL,
 	`nombre_medicamento` TEXT(65535) NOT NULL COLLATE 'latin1_swedish_ci',
 	`fecha_hora` DATETIME NOT NULL,
 	`padecimiento` TEXT(65535) NULL COLLATE 'latin1_swedish_ci',
-	`saludable` INT(11) NULL,
+	`saludable` INT(10,0) NULL,
 	`nombre_medico` CHAR(100) NOT NULL COLLATE 'latin1_swedish_ci',
 	`nombre_paciente` CHAR(100) NOT NULL COLLATE 'latin1_swedish_ci',
 	`rfc` CHAR(13) NULL COLLATE 'latin1_swedish_ci',
-	`edad` INT(11) NOT NULL,
-	`peso` INT(11) NULL,
-	`estatura` INT(11) NULL
+	`edad` INT(10,0) NOT NULL,
+	`peso` INT(10,0) NULL,
+	`estatura` INT(10,0) NULL
 ) ENGINE=MyISAM;
 
 -- Dumping structure for table safo.descuentos
 CREATE TABLE IF NOT EXISTS `descuentos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_paciente` int(11) NOT NULL,
-  `descuento` int(11) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_paciente` int NOT NULL,
+  `descuento` int DEFAULT NULL,
   `gasto` double NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_paciente` (`id_paciente`),
@@ -519,10 +532,10 @@ CREATE TABLE IF NOT EXISTS `descuentos` (
 
 -- Dumping structure for table safo.emergencias_medicas
 CREATE TABLE IF NOT EXISTS `emergencias_medicas` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_paciente` int(11) NOT NULL,
-  `id_medico` int(11) NOT NULL,
-  `tipo` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_paciente` int NOT NULL,
+  `id_medico` int NOT NULL,
+  `tipo` int NOT NULL,
   `descripcion` text,
   PRIMARY KEY (`id`),
   KEY `id_paciente` (`id_paciente`),
@@ -604,10 +617,10 @@ INSERT INTO `emergencias_medicas` (`id`, `id_paciente`, `id_medico`, `tipo`, `de
 
 -- Dumping structure for table safo.empleados
 CREATE TABLE IF NOT EXISTS `empleados` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `nombre` char(100) NOT NULL,
   `username` char(100) NOT NULL,
-  `clave_acceso` int(11) NOT NULL,
+  `clave_acceso` int NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
@@ -628,10 +641,10 @@ INSERT INTO `empleados` (`id`, `nombre`, `username`, `clave_acceso`) VALUES
 
 -- Dumping structure for table safo.expediente
 CREATE TABLE IF NOT EXISTS `expediente` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_consulta` int(11) NOT NULL,
-  `folio` int(11) NOT NULL,
-  `consultorio` int(11) NOT NULL DEFAULT '1',
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_consulta` int NOT NULL,
+  `folio` int NOT NULL,
+  `consultorio` int NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `id_consulta` (`id_consulta`),
   CONSTRAINT `expediente_ibfk_1` FOREIGN KEY (`id_consulta`) REFERENCES `consultas` (`id`)
@@ -710,8 +723,8 @@ INSERT INTO `expediente` (`id`, `id_consulta`, `folio`, `consultorio`) VALUES
 
 -- Dumping structure for table safo.historial_lab
 CREATE TABLE IF NOT EXISTS `historial_lab` (
-  `id_paciente` int(11) DEFAULT NULL,
-  `id_resultado` int(11) DEFAULT NULL,
+  `id_paciente` int DEFAULT NULL,
+  `id_resultado` int DEFAULT NULL,
   KEY `id_paciente` (`id_paciente`),
   KEY `id_resultado` (`id_resultado`),
   CONSTRAINT `historial_lab_ibfk_1` FOREIGN KEY (`id_paciente`) REFERENCES `pacientes` (`id`),
@@ -782,9 +795,9 @@ INSERT INTO `historial_lab` (`id_paciente`, `id_resultado`) VALUES
 
 -- Dumping structure for table safo.inventario
 CREATE TABLE IF NOT EXISTS `inventario` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_producto` int(11) NOT NULL,
-  `cantidad` int(11) NOT NULL DEFAULT '0',
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_producto` int NOT NULL,
+  `cantidad` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `id_producto` (`id_producto`),
   CONSTRAINT `inventario_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id`)
@@ -897,7 +910,7 @@ INSERT INTO `inventario` (`id`, `id_producto`, `cantidad`) VALUES
 
 -- Dumping structure for table safo.laboratoristas
 CREATE TABLE IF NOT EXISTS `laboratoristas` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `usuario` char(100) NOT NULL,
   `pass` char(100) NOT NULL,
   PRIMARY KEY (`id`),
@@ -915,31 +928,38 @@ INSERT INTO `laboratoristas` (`id`, `usuario`, `pass`) VALUES
 
 -- Dumping structure for table safo.medicamentos_recetados
 CREATE TABLE IF NOT EXISTS `medicamentos_recetados` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `nombre_medicamento` text NOT NULL,
-  `id_receta` int(11) NOT NULL,
+  `id_receta` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_receta` (`id_receta`),
   CONSTRAINT `medicamentos_recetados_ibfk_1` FOREIGN KEY (`id_receta`) REFERENCES `recetas` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
--- Dumping data for table safo.medicamentos_recetados: ~5 rows (approximately)
+-- Dumping data for table safo.medicamentos_recetados: ~11 rows (approximately)
 /*!40000 ALTER TABLE `medicamentos_recetados` DISABLE KEYS */;
 INSERT INTO `medicamentos_recetados` (`id`, `nombre_medicamento`, `id_receta`) VALUES
 	(1, 'paracetamol', 1),
 	(2, 'te de limoncito', 1),
 	(3, 'tempra de uva', 1),
 	(4, 'Una peda ', 2),
-	(5, 'reparaciones patito', 3);
+	(5, 'reparaciones patito', 3),
+	(6, 'no', 9),
+	(7, 'no', 10),
+	(8, 'no', 11),
+	(9, 'paracetamol', 12),
+	(10, 'paracetamol', 13),
+	(11, 'anticongelante, 2L', 14),
+	(12, 'Agua?', 15);
 /*!40000 ALTER TABLE `medicamentos_recetados` ENABLE KEYS */;
 
 -- Dumping structure for table safo.medicos
 CREATE TABLE IF NOT EXISTS `medicos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `nombre` char(100) NOT NULL,
   `cedula` char(13) NOT NULL DEFAULT 'sin-cédula',
-  `consultorio` int(11) NOT NULL DEFAULT '-1',
-  `edad` int(11) NOT NULL,
+  `consultorio` int NOT NULL DEFAULT '-1',
+  `edad` int NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
@@ -958,8 +978,8 @@ INSERT INTO `medicos` (`id`, `nombre`, `cedula`, `consultorio`, `edad`) VALUES
 
 -- Dumping structure for table safo.mostrador
 CREATE TABLE IF NOT EXISTS `mostrador` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `producto` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `producto` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `producto` (`producto`),
   CONSTRAINT `mostrador_ibfk_1` FOREIGN KEY (`producto`) REFERENCES `productos` (`id`)
@@ -971,9 +991,9 @@ CREATE TABLE IF NOT EXISTS `mostrador` (
 
 -- Dumping structure for table safo.pacientes
 CREATE TABLE IF NOT EXISTS `pacientes` (
-  `id` int(11) NOT NULL,
-  `peso` int(11) DEFAULT NULL,
-  `estatura` int(11) DEFAULT NULL,
+  `id` int NOT NULL,
+  `peso` int DEFAULT NULL,
+  `estatura` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `pacientes_ibfk_1` FOREIGN KEY (`id`) REFERENCES `clientes` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -1029,9 +1049,9 @@ INSERT INTO `pacientes` (`id`, `peso`, `estatura`) VALUES
 
 -- Dumping structure for table safo.pacientes_alergias
 CREATE TABLE IF NOT EXISTS `pacientes_alergias` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_paciente` int(11) NOT NULL,
-  `id_alergia` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_paciente` int NOT NULL,
+  `id_alergia` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_paciente` (`id_paciente`),
   KEY `id_alergia` (`id_alergia`),
@@ -1134,19 +1154,19 @@ INSERT INTO `pacientes_alergias` (`id`, `id_paciente`, `id_alergia`) VALUES
 -- Dumping structure for view safo.pacientes_datos
 -- Creating temporary table to overcome VIEW dependency errors
 CREATE TABLE `pacientes_datos` (
-	`id` INT(11) NOT NULL,
+	`id` INT(10,0) NOT NULL,
 	`nombre` CHAR(100) NOT NULL COLLATE 'latin1_swedish_ci',
 	`rfc` CHAR(13) NULL COLLATE 'latin1_swedish_ci',
-	`edad` INT(11) NOT NULL,
-	`peso` INT(11) NULL,
-	`estatura` INT(11) NULL
+	`edad` INT(10,0) NOT NULL,
+	`peso` INT(10,0) NULL,
+	`estatura` INT(10,0) NULL
 ) ENGINE=MyISAM;
 
 -- Dumping structure for table safo.productos
 CREATE TABLE IF NOT EXISTS `productos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `nombre` char(100) NOT NULL,
-  `precio` int(11) NOT NULL,
+  `precio` int NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=latin1;
 
@@ -1255,31 +1275,56 @@ INSERT INTO `productos` (`id`, `nombre`, `precio`) VALUES
 	(100, 'neque.', 543);
 /*!40000 ALTER TABLE `productos` ENABLE KEYS */;
 
+-- Dumping structure for procedure safo.p_insertar_consulta
+DELIMITER //
+CREATE PROCEDURE `p_insertar_consulta`(
+	IN medico INT,
+	IN paciente INT,
+	IN hora DATETIME,
+	IN padec TEXT
+)
+BEGIN
+	INSERT INTO consultas(id_medico, id_paciente, fecha_hora, padecimiento)
+		VALUES(medico, paciente, hora, padec);
+
+	SELECT id
+		FROM consultas
+		WHERE fecha_hora = hora;
+END//
+DELIMITER ;
+
 -- Dumping structure for table safo.recetas
 CREATE TABLE IF NOT EXISTS `recetas` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `saludable` int(11) DEFAULT '0',
-  `id_consulta` int(11) DEFAULT '-1',
+  `id` int NOT NULL AUTO_INCREMENT,
+  `saludable` int DEFAULT '0',
+  `id_consulta` int DEFAULT '-1',
   PRIMARY KEY (`id`),
   KEY `id_consulta` (`id_consulta`),
   CONSTRAINT `recetas_ibfk_1` FOREIGN KEY (`id_consulta`) REFERENCES `consultas` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 
--- Dumping data for table safo.recetas: ~3 rows (approximately)
+-- Dumping data for table safo.recetas: ~9 rows (approximately)
 /*!40000 ALTER TABLE `recetas` DISABLE KEYS */;
 INSERT INTO `recetas` (`id`, `saludable`, `id_consulta`) VALUES
 	(1, 0, 101),
 	(2, 1, 102),
-	(3, 0, 103);
+	(3, 0, 103),
+	(9, 0, 114),
+	(10, 0, 115),
+	(11, 0, 116),
+	(12, 1, 117),
+	(13, 1, 118),
+	(14, 0, 119),
+	(15, 0, 120);
 /*!40000 ALTER TABLE `recetas` ENABLE KEYS */;
 
 -- Dumping structure for table safo.resultados_lab
 CREATE TABLE IF NOT EXISTS `resultados_lab` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `diagnostico` text NOT NULL,
-  `id_laboratorista` int(11) NOT NULL,
-  `id_paciente` int(11) NOT NULL,
-  `id_analisis` int(11) NOT NULL,
+  `id_laboratorista` int NOT NULL,
+  `id_paciente` int NOT NULL,
+  `id_analisis` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_laboratorista` (`id_laboratorista`),
   KEY `id_paciente` (`id_paciente`),
@@ -1327,8 +1372,8 @@ INSERT INTO `resultados_lab` (`id`, `diagnostico`, `id_laboratorista`, `id_pacie
 
 -- Dumping structure for table safo.servicios_especiales
 CREATE TABLE IF NOT EXISTS `servicios_especiales` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_paciente` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_paciente` int NOT NULL,
   `descripcion` text,
   PRIMARY KEY (`id`),
   KEY `id_paciente` (`id_paciente`),
@@ -1388,9 +1433,9 @@ INSERT INTO `servicios_especiales` (`id`, `id_paciente`, `descripcion`) VALUES
 
 -- Dumping structure for table safo.tratamientos
 CREATE TABLE IF NOT EXISTS `tratamientos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_paciente` int(11) NOT NULL,
-  `id_medico` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_paciente` int NOT NULL,
+  `id_medico` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_paciente` (`id_paciente`),
   KEY `id_medico` (`id_medico`),
@@ -1430,38 +1475,17 @@ INSERT INTO `tratamientos` (`id`, `id_paciente`, `id_medico`) VALUES
 -- Dumping structure for view safo.alergias_pacientes
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `alergias_pacientes`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `alergias_pacientes` AS SELECT pacientes.id, alergias.nombre FROM alergias
-	INNER JOIN pacientes_alergias
-		ON alergias.id = pacientes_alergias.id_alergia
-	INNER JOIN pacientes
-		ON pacientes_alergias.id_paciente = pacientes.id ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `alergias_pacientes` AS select `pacientes`.`id` AS `id`,`alergias`.`nombre` AS `nombre` from ((`alergias` join `pacientes_alergias` on((`alergias`.`id` = `pacientes_alergias`.`id_alergia`))) join `pacientes` on((`pacientes_alergias`.`id_paciente` = `pacientes`.`id`)));
 
 -- Dumping structure for view safo.consultas_medicamentos
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `consultas_medicamentos`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `consultas_medicamentos` AS SELECT
-		consultas.id AS 'id_consulta', medicos.id AS 'id_medico', pacientes_datos.id AS 'id_paciente',
-		medicamentos_recetados.nombre_medicamento,
-		consultas.fecha_hora, consultas.padecimiento,
-		recetas.saludable, 
-		medicos.nombre AS 'nombre_medico',
-		pacientes_datos.nombre AS 'nombre_paciente', pacientes_datos.rfc, pacientes_datos.edad, pacientes_datos.peso, pacientes_datos.estatura
-	FROM medicamentos_recetados
-	LEFT JOIN recetas
-		ON medicamentos_recetados.id_receta = recetas.id
-	INNER JOIN consultas
-		ON recetas.id_consulta = consultas.id
-	INNER JOIN medicos
-		ON consultas.id_medico = medicos.id
-	INNER JOIN pacientes_datos
-		ON consultas.id_paciente = pacientes_datos.id ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `consultas_medicamentos` AS select `consultas`.`id` AS `id_consulta`,`medicos`.`id` AS `id_medico`,`pacientes_datos`.`id` AS `id_paciente`,`medicamentos_recetados`.`nombre_medicamento` AS `nombre_medicamento`,`consultas`.`fecha_hora` AS `fecha_hora`,`consultas`.`padecimiento` AS `padecimiento`,`recetas`.`saludable` AS `saludable`,`medicos`.`nombre` AS `nombre_medico`,`pacientes_datos`.`nombre` AS `nombre_paciente`,`pacientes_datos`.`rfc` AS `rfc`,`pacientes_datos`.`edad` AS `edad`,`pacientes_datos`.`peso` AS `peso`,`pacientes_datos`.`estatura` AS `estatura` from ((((`medicamentos_recetados` left join `recetas` on((`medicamentos_recetados`.`id_receta` = `recetas`.`id`))) join `consultas` on((`recetas`.`id_consulta` = `consultas`.`id`))) join `medicos` on((`consultas`.`id_medico` = `medicos`.`id`))) join `pacientes_datos` on((`consultas`.`id_paciente` = `pacientes_datos`.`id`)));
 
 -- Dumping structure for view safo.pacientes_datos
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `pacientes_datos`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `pacientes_datos` AS SELECT clientes.id, nombre, rfc, edad, peso, estatura FROM clientes
-	INNER JOIN pacientes
-		ON clientes.id = pacientes.id ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `pacientes_datos` AS select `clientes`.`id` AS `id`,`clientes`.`nombre` AS `nombre`,`clientes`.`rfc` AS `rfc`,`clientes`.`edad` AS `edad`,`pacientes`.`peso` AS `peso`,`pacientes`.`estatura` AS `estatura` from (`clientes` join `pacientes` on((`clientes`.`id` = `pacientes`.`id`)));
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
